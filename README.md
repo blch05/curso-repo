@@ -1,4 +1,4 @@
-# Bootcamp de Programación Web desde Cero (TypeScript + React + Supabase + Express).
+# Bootcamp de Programación Web desde Cero (TypeScript + React + Supabase + Express)
 
 Repositorio oficial del curso práctico de 12 semanas. Acá encontrás todas las clases, presentaciones, documentación y el espacio de entregas mediante **Pull Requests**.
 
