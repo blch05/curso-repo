@@ -1,7 +1,6 @@
 body {
-justify-content: center;
-align-items: center;
-margin:0px;
+    padding:0px;
+    margin:0px;
     background-image: url("https://preview.redd.it/i-spent-the-last-9-hours-building-this-huge-magical-library-v0-j760zttlgjj71.png?width=1080&crop=smart&auto=webp&s=9ae0697e1b78d99f1b565a154c11144bc28a3952");
     background-size: cover;
     background-position: center;
@@ -9,10 +8,10 @@ margin:0px;
     background-attachment: fixed;
 }
 header {
-  background-color:rgb(117, 83, 83);
-  color: #ffffff;
-  padding: 5px 0;
-  margin: 0px;
+    background-color:rgb(117, 83, 83);
+    color: #ffffff;
+    padding: 5px 0;
+    margin: 0px;
 
 }
 header h1{
@@ -42,12 +41,12 @@ header p {
     background-color: aliceblue;}
 .art{
     box-sizing: border-box;
-width: 100%;
-padding: 0px;
-max-width:  300px;
-max-height: 200px;
-border-radius:24px;
-padding: 5px;
+    width: 100%;
+    padding: 0px;
+    max-width:  300px;
+    max-height: 200px;
+    border-radius:24px;
+    padding: 5px;
 }
 .titulo{
     font-style: italic;
@@ -59,7 +58,7 @@ padding: 5px;
 }
 .lista{
     font-style: italic;
-     margin-bottom: 20px;
+    margin-bottom: 20px;
     color: #050505;
     padding-left: 20px;
 }
@@ -77,10 +76,10 @@ button {
     transition: all 0.4s ease;   
 }
 footer {
-  background-color:rgb(117, 83, 83);
-  padding: 10Spx 0;
-  font-size: 14px;
-  color: #bdbdbd;
-  font-style: italic;
-  margin-top: 165px;
+    background-color:rgb(117, 83, 83);
+    padding: 10Spx 0;
+    font-size: 14px;
+    color: #bdbdbd;
+    font-style: italic;
+    margin-top: 165px;
 }
