@@ -10,6 +10,8 @@ Conceptos que debés poder explicar con tus propias palabras en los exámenes or
 - **Single-thread y Event Loop (conceptual):** JavaScript ejecuta una tarea principal a la vez; la asincronía (`Promise` / `async-await`) delega operaciones lentas (como `fetch`) para no congelar la interfaz.
 - **HTTP:** Protocolo de comunicación Request/Response entre cliente y servidor. Verbos principales: `GET`, `POST`, `PUT`/`PATCH`, `DELETE`. Códigos clave: `200` (OK), `201` (Created), `400` (Bad Request), `401` (Unauthorized), `403` (Forbidden), `404` (Not Found), `429` (Too Many Requests), `500` (Server Error).
 - **API / API REST:** Interfaz de endpoints HTTP que intercambian datos (generalmente en JSON) siguiendo convenciones estándar.
+- **Cliente HTTP (Postman):** Herramienta estándar de la industria para enviar peticiones HTTP (`GET`, `POST`, `PUT`/`PATCH`, `DELETE`) con headers y body JSON, inspeccionar respuestas y probar endpoints de forma aislada antes de conectar el frontend.
+- **OpenAPI / Swagger:** Estándar oficial (**OpenAPI**) para describir el contrato de una API REST (rutas, parámetros, headers, payloads y códigos de respuesta) y conjunto de herramientas (**Swagger UI**) que generan documentación interactiva (*Try it out*).
 - **CORS:** Mecanismo de seguridad del navegador que controla qué dominios tienen permiso para consultar un backend.
 - **Dominio, DNS (`A` / `CNAME`) y HTTPS/SSL:** El nombre legible de un sitio (`negocio.com.ar`), el sistema que traduce ese nombre a la IP/servidor real, y el cifrado seguro de la conexión.
 

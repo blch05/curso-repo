@@ -972,65 +972,73 @@
         text-transform: uppercase;
         letter-spacing: 0.06em;
       }
-      .demo-card {
+      .demo-page {
         width: 100%;
-        max-width: 280px;
-        background: #ffffff;
+        max-width: 320px;
+        background: #f8fafc;
         color: #0f172a;
-        border-radius: 14px;
-        padding: 20px;
-        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
-        border: 1px solid #e2e8f0;
-      }
-      .demo-avatar {
-        width: 52px;
-        height: 52px;
         border-radius: 12px;
-        background: linear-gradient(135deg, #0f172a, #334155);
-        color: #ffffff;
+        overflow: hidden;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
+        border: 1px solid #cbd5e1;
         display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 800;
-        font-size: 18px;
-        margin-bottom: 12px;
+        flex-direction: column;
       }
-      .demo-card h4 {
-        font-size: 17px;
-        font-weight: 800;
-        margin-bottom: 4px;
+      .demo-page-header {
+        background: #0f172a;
+        color: #ffffff;
+        padding: 14px 16px;
       }
-      .demo-card p {
+      .demo-page-header h4 {
+        font-size: 15px;
+        font-weight: 800;
+        margin-bottom: 3px;
+      }
+      .demo-page-header p {
+        font-size: 11.5px;
+        color: #cbd5e1;
+        line-height: 1.4;
+        margin: 0;
+      }
+      .demo-page-main {
+        padding: 14px 16px;
+      }
+      .demo-page-main h5 {
         font-size: 12.5px;
-        color: #475569;
-        line-height: 1.45;
-        margin-bottom: 12px;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 8px;
       }
-      .demo-card ul {
+      .demo-page-main ul {
         list-style: none;
         display: flex;
         flex-direction: column;
-        gap: 6px;
-        margin-bottom: 14px;
-        font-size: 12.5px;
+        gap: 5px;
+        margin-bottom: 12px;
+        font-size: 12px;
         color: #1e293b;
       }
-      .demo-card ul li::before {
+      .demo-page-main ul li::before {
         content: "✓ ";
         color: #16a34a;
         font-weight: 700;
       }
       .demo-btn {
-        display: block;
-        width: 100%;
-        text-align: center;
+        display: inline-block;
         background: #0f172a;
         color: #ffffff;
         text-decoration: none;
-        padding: 9px 12px;
-        border-radius: 8px;
-        font-size: 12.5px;
+        padding: 7px 12px;
+        border-radius: 7px;
+        font-size: 12px;
         font-weight: 600;
+      }
+      .demo-page-footer {
+        background: #ffffff;
+        border-top: 1px solid #e2e8f0;
+        padding: 9px 16px;
+        font-size: 11px;
+        color: #64748b;
       }
 
       /* Overview modal */
@@ -1365,7 +1373,7 @@
 <span class="tok-hl">    <span class="tok-tag">&lt;link</span> <span class="tok-attr">rel</span>=<span class="tok-str">"stylesheet"</span> <span class="tok-attr">href</span>=<span class="tok-str">"styles.css"</span> <span class="tok-tag">/&gt;</span></span>
   <span class="tok-tag">&lt;/head&gt;</span>
   <span class="tok-tag">&lt;body&gt;</span>
-    <span class="tok-cmt">&lt;!-- Acá va tu tarjeta --&gt;</span>
+    <span class="tok-cmt">&lt;!-- Acá va tu página: header, main y footer --&gt;</span>
   <span class="tok-tag">&lt;/body&gt;</span>
 <span class="tok-tag">&lt;/html&gt;</span></code></pre>
         </div>
@@ -1376,7 +1384,7 @@
         <p class="eyebrow">Demo en Vivo · Capa 2</p>
         <h2>CSS en acción: mismo HTML, distinto diseño</h2>
         <p class="lead">
-          El HTML no cambia ni una línea. <strong>Editá las reglas CSS</strong> o probá los presets para ver cómo transforma la tarjeta al instante:
+          El HTML no cambia ni una línea. <strong>Editá las reglas CSS</strong> o probá los presets para ver cómo transforma la página al instante:
         </p>
 
         <div class="playground">
@@ -1458,7 +1466,7 @@
               <input id="rangePadding" type="range" min="0" max="44" value="22" />
             </div>
 
-            <pre class="code-block" style="margin-top: 4px; padding: 12px 14px; font-size: 12px;"><code id="bmCode">.tarjeta {
+            <pre class="code-block" style="margin-top: 4px; padding: 12px 14px; font-size: 12px;"><code id="bmCode">.servicios {
   margin: 24px;
   border: 4px solid;
   padding: 22px;
@@ -1526,30 +1534,37 @@
         <p class="eyebrow">Práctica · Entregable 0</p>
         <h2>Consigna de la Clase 0</h2>
         <p class="lead">
-          Creá <code>entregas/&lt;tu-usuario-github&gt;/clase-00/index.html</code> y <code>styles.css</code> con una tarjeta de presentación (tuya o de un comercio local):
+          Creá <code>entregas/&lt;tu-usuario-github&gt;/clase-00/index.html</code> y <code>styles.css</code> con una <strong>página de presentación</strong> (tuya o de un comercio local):
         </p>
 
         <div class="consigna-grid">
           <ul class="clean" style="margin-top: 0;">
-            <li><span class="num-badge">1</span><span>Un título principal (<code>&lt;h1&gt;</code>) y una descripción corta (<code>&lt;p&gt;</code>).</span></li>
-            <li><span class="num-badge">2</span><span>Una imagen (<code>&lt;img&gt;</code>) con atributo <code>alt</code> descriptivo.</span></li>
-            <li><span class="num-badge">3</span><span>Una lista de al menos 3 servicios, productos o gustos (<code>&lt;ul&gt;</code> y <code>&lt;li&gt;</code>).</span></li>
-            <li><span class="num-badge">4</span><span>Un enlace o botón de acción (<code>&lt;a&gt;</code> o <code>&lt;button&gt;</code>).</span></li>
-            <li><span class="num-badge">5</span><span>En <code>styles.css</code>: colores sobrios, bordes redondeados, buen <code>padding</code> y tarjeta centrada en pantalla.</span></li>
+            <li><span class="num-badge">1</span><span>Estructura semántica real: <code>&lt;header&gt;</code>, <code>&lt;main&gt;</code> y <code>&lt;footer&gt;</code> en ese orden dentro de <code>&lt;body&gt;</code>.</span></li>
+            <li><span class="num-badge">2</span><span>En <code>&lt;header&gt;</code>: título principal (<code>&lt;h1&gt;</code>) y descripción corta (<code>&lt;p&gt;</code>).</span></li>
+            <li><span class="num-badge">3</span><span>En <code>&lt;main&gt;</code>: una imagen (<code>&lt;img&gt;</code> con <code>alt</code>), una <code>&lt;section&gt;</code> con <code>&lt;h2&gt;</code>, lista (<code>&lt;ul&gt;</code>/<code>&lt;li&gt;</code>) y un <code>&lt;a&gt;</code> o <code>&lt;button&gt;</code>.</span></li>
+            <li><span class="num-badge">4</span><span>En <code>&lt;footer&gt;</code>: horarios, dirección o datos de contacto (<code>&lt;p&gt;</code>).</span></li>
+            <li><span class="num-badge">5</span><span>En <code>styles.css</code>: colores sobrios, buen <code>padding</code>, contenido con <code>max-width</code> centrado y pie de página al fondo.</span></li>
           </ul>
 
           <div class="demo-card-wrap">
-            <span class="demo-caption">Ejemplo de referencia</span>
-            <div class="demo-card">
-              <div class="demo-avatar">DP</div>
-              <h4>Barbería Don Pepe</h4>
-              <p>Cortes clásicos y perfilado de barba en Bovril. Turnos por WhatsApp.</p>
-              <ul>
-                <li>Corte clásico</li>
-                <li>Perfilado de barba</li>
-                <li>Corte + barba completo</li>
-              </ul>
-              <span class="demo-btn">Reservar turno</span>
+            <span class="demo-caption">Ejemplo de referencia (página)</span>
+            <div class="demo-page">
+              <div class="demo-page-header">
+                <h4>Barbería Don Pepe</h4>
+                <p>Cortes clásicos y perfilado de barba en Bovril.</p>
+              </div>
+              <div class="demo-page-main">
+                <h5>Nuestros servicios</h5>
+                <ul>
+                  <li>Corte clásico</li>
+                  <li>Perfilado de barba</li>
+                  <li>Corte + barba completo</li>
+                </ul>
+                <span class="demo-btn">Reservar turno</span>
+              </div>
+              <div class="demo-page-footer">
+                Av. San Martín 450 · Lun a Sáb 9 a 20 hs
+              </div>
             </div>
           </div>
         </div>
@@ -1562,7 +1577,7 @@
         <ul class="clean">
           <li><span class="num-badge">1</span><span>Creá tu cuenta en <strong>WTDev Campus</strong> con tu nombre y tu usuario exacto de GitHub.</span></li>
           <li><span class="num-badge">2</span><span>Instalá <strong>VS Code</strong>, <strong>Node.js LTS</strong>, <strong>Git</strong> y hacé el <strong>Fork</strong> del repositorio del curso.</span></li>
-          <li><span class="num-badge">3</span><span>Armá tu tarjeta de Clase 0 y abrí tu primer <strong>Pull Request</strong> antes de la Clase 1.</span></li>
+          <li><span class="num-badge">3</span><span>Armá tu página de Clase 0 y abrí tu primer <strong>Pull Request</strong> antes de la Clase 1.</span></li>
           <li><span class="num-badge">4</span><span>En la <strong>Clase 1</strong> lo revisamos y mergeamos en vivo antes de arrancar con TypeScript.</span></li>
         </ul>
         <div class="callout ok" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
@@ -1783,45 +1798,58 @@
       /* ================================
          PLAYGROUND #1: HTML SEMÁNTICO
          ================================ */
-      const DEFAULT_HTML = `<main class="tarjeta">
-  <header>
-    <h1>Barbería Don Pepe</h1>
-    <p>Turnos por orden de llegada y reservas online.</p>
-  </header>
+      const DEFAULT_HTML = `<header>
+  <h1>Barbería Don Pepe</h1>
+  <p>Cortes clásicos y perfilado de barba en Bovril.</p>
+</header>
 
-  <ul>
-    <li>Corte clásico</li>
-    <li>Perfilado de barba</li>
-    <li>Corte + barba</li>
-  </ul>
+<main>
+  <section class="servicios">
+    <h2>Nuestros servicios</h2>
+    <ul>
+      <li>Corte clásico</li>
+      <li>Perfilado de barba</li>
+      <li>Corte + barba</li>
+    </ul>
+    <a href="#reservar" class="boton">Reservar turno</a>
+  </section>
+</main>
 
-  <a href="#reservar" class="boton">Reservar turno</a>
-</main>`;
+<footer>
+  <p>Av. San Martín 450 · Lun a Sáb 9 a 20 hs</p>
+</footer>`;
 
       const HTML_BASE_CSS = `
+        * { box-sizing: border-box; }
         body {
           font-family: system-ui, -apple-system, sans-serif;
           background: #f4f4f5;
+          color: #0a0a0a;
           min-height: 100vh;
           margin: 0;
-          padding: 24px;
           display: flex;
-          align-items: center;
-          justify-content: center;
-          box-sizing: border-box;
+          flex-direction: column;
         }
-        .tarjeta {
+        header {
+          background: #0f172a;
+          color: #ffffff;
+          padding: 20px 24px;
+        }
+        header h1 { margin: 0 0 4px; font-size: 20px; }
+        header p { margin: 0; color: #cbd5e1; font-size: 13px; }
+        main {
+          flex: 1;
+          padding: 20px 24px;
+        }
+        .servicios {
           background: #ffffff;
           border: 1px solid #e5e5e5;
-          border-radius: 14px;
-          padding: 24px;
-          max-width: 340px;
-          width: 100%;
-          box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+          border-radius: 10px;
+          padding: 18px 20px;
+          max-width: 460px;
         }
-        h1 { margin: 0 0 8px; font-size: 22px; color: #0a0a0a; }
-        p { margin: 0 0 16px; color: #525252; font-size: 14px; line-height: 1.5; }
-        ul { padding-left: 18px; margin: 0 0 18px; color: #262626; font-size: 14px; line-height: 1.7; }
+        h2 { margin: 0 0 10px; font-size: 16px; color: #0a0a0a; }
+        ul { padding-left: 18px; margin: 0 0 16px; color: #262626; font-size: 14px; line-height: 1.7; }
         .boton {
           display: inline-block;
           background: #0a0a0a;
@@ -1829,9 +1857,17 @@
           text-decoration: none;
           padding: 9px 16px;
           border-radius: 8px;
-          font-size: 13.5px;
+          font-size: 13px;
           font-weight: 600;
         }
+        footer {
+          background: #ffffff;
+          border-top: 1px solid #e5e5e5;
+          padding: 12px 24px;
+          font-size: 12px;
+          color: #525252;
+        }
+        footer p { margin: 0; }
       `;
 
       const htmlEditor = document.getElementById('htmlEditor');
@@ -1888,127 +1924,160 @@
          PLAYGROUND #2: CSS EN VIVO
          ================================ */
       const CSS_PRESETS = {
-        clean: `body {
+        clean: `* { box-sizing: border-box; }
+
+body {
   font-family: system-ui, sans-serif;
   background: #f4f4f5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
-}
-
-.tarjeta {
-  background: #ffffff;
   color: #0a0a0a;
-  padding: 24px;
-  border-radius: 14px;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background: #0f172a;
+  color: #ffffff;
+  padding: 20px 24px;
+}
+
+header h1 { margin: 0 0 4px; font-size: 20px; }
+header p { margin: 0; color: #cbd5e1; font-size: 13px; }
+
+main {
+  flex: 1;
+  padding: 20px 24px;
+}
+
+.servicios {
+  background: #ffffff;
+  padding: 18px 20px;
+  border-radius: 10px;
   border: 1px solid #e5e5e5;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-  max-width: 310px;
-}
-
-h1 {
-  margin: 0 0 6px;
-  font-size: 22px;
-}
-
-p {
-  color: #525252;
-  font-size: 14px;
 }
 
 .boton {
   display: inline-block;
-  margin-top: 10px;
+  margin-top: 8px;
   background: #0a0a0a;
   color: #ffffff;
-  padding: 10px 16px;
+  padding: 9px 16px;
   border-radius: 8px;
   text-decoration: none;
   font-weight: 600;
+}
+
+footer {
+  background: #ffffff;
+  border-top: 1px solid #e5e5e5;
+  padding: 12px 24px;
+  font-size: 12px;
+  color: #525252;
 }`,
-        dark: `body {
+        dark: `* { box-sizing: border-box; }
+
+body {
   font-family: system-ui, sans-serif;
   background: #09090b;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
-}
-
-.tarjeta {
-  background: #18181b;
   color: #fafafa;
-  padding: 26px;
-  border-radius: 16px;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background: #18181b;
+  border-bottom: 1px solid #27272a;
+  padding: 20px 24px;
+}
+
+header h1 { margin: 0 0 4px; font-size: 20px; color: #60a5fa; }
+header p { margin: 0; color: #a1a1aa; font-size: 13px; }
+
+main {
+  flex: 1;
+  padding: 20px 24px;
+}
+
+.servicios {
+  background: #18181b;
+  padding: 18px 20px;
+  border-radius: 12px;
   border: 1px solid #27272a;
-  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.5);
-  max-width: 310px;
-}
-
-h1 {
-  margin: 0 0 6px;
-  font-size: 22px;
-  color: #60a5fa;
-}
-
-p {
-  color: #a1a1aa;
-  font-size: 14px;
 }
 
 .boton {
   display: inline-block;
-  margin-top: 10px;
+  margin-top: 8px;
   background: #2563eb;
   color: #ffffff;
-  padding: 10px 18px;
+  padding: 9px 18px;
   border-radius: 999px;
   text-decoration: none;
   font-weight: 600;
+}
+
+footer {
+  background: #18181b;
+  border-top: 1px solid #27272a;
+  padding: 12px 24px;
+  font-size: 12px;
+  color: #71717a;
 }`,
-        warm: `body {
+        warm: `* { box-sizing: border-box; }
+
+body {
   font-family: Georgia, serif;
   background: #fef3c7;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+  color: #451a03;
   margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.tarjeta {
+header {
+  background: #78350f;
+  color: #fffbeb;
+  padding: 20px 24px;
+}
+
+header h1 { margin: 0 0 4px; font-size: 21px; }
+header p { margin: 0; color: #fde68a; font-size: 13px; }
+
+main {
+  flex: 1;
+  padding: 20px 24px;
+}
+
+.servicios {
   background: #fffbeb;
-  color: #451a03;
-  padding: 26px;
+  padding: 18px 20px;
   border-radius: 8px;
   border: 2px solid #d97706;
-  box-shadow: 6px 6px 0 #d97706;
-  max-width: 310px;
-}
-
-h1 {
-  margin: 0 0 6px;
-  font-size: 23px;
-}
-
-p {
-  color: #78350f;
-  font-size: 14px;
+  box-shadow: 5px 5px 0 #d97706;
 }
 
 .boton {
   display: inline-block;
-  margin-top: 10px;
+  margin-top: 8px;
   background: #b45309;
   color: #ffffff;
-  padding: 10px 16px;
+  padding: 9px 16px;
   border-radius: 6px;
   text-decoration: none;
   font-family: system-ui, sans-serif;
   font-weight: 700;
+}
+
+footer {
+  background: #fde68a;
+  border-top: 2px solid #d97706;
+  padding: 12px 24px;
+  font-size: 12px;
+  color: #78350f;
 }`
       };
 
@@ -2073,7 +2142,7 @@ p {
         bmMargin.style.padding = `${m}px`;
         bmBorder.style.borderWidth = `${b}px`;
         bmPadding.style.padding = `${p}px`;
-        bmCode.textContent = `.tarjeta {\n  margin: ${m}px;\n  border: ${b}px solid;\n  padding: ${p}px;\n}`;
+        bmCode.textContent = `.servicios {\n  margin: ${m}px;\n  border: ${b}px solid;\n  padding: ${p}px;\n}`;
       }
 
       rangeMargin.addEventListener('input', updateBoxModel);

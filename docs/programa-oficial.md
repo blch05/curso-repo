@@ -20,7 +20,7 @@ Este curso no entrega un título ni certificado formal: el objetivo real es que 
 - **Lenguaje:** TypeScript moderno (ejecutado nativamente en Node.js LTS, estándar actual de la industria).
 - **Frontend:** React + Vite + Tailwind CSS + **Custom Hooks**, **TanStack Query** (estado del servidor) y **Zustand** (estado global de cliente).
 - **Base de Datos y Autenticación:** Supabase (PostgreSQL con SQL escrito a mano + roles + políticas de seguridad RLS).
-- **Backend Propio:** Node.js + Express en TypeScript (con validación de JWT y roles).
+- **Backend Propio y APIs:** Node.js + Express en TypeScript (con validación de JWT y roles), **Postman** (pruebas aisladas y colecciones) y lectura de contratos **OpenAPI / Swagger**.
 - **Flujo de Trabajo y Producción:** Git, GitHub (flujo profesional de Fork + Pull Requests), Vercel y Render.
 
 ---
@@ -49,7 +49,7 @@ Si te trabás de lunes a jueves, primero buscá en los recursos de la semana y *
 ### Fase 1: Lógica Pura en TypeScript y Web Básica (Semanas 1 a 4)
 - **Semana 1:** Revisión y merge del PR de Clase 0, `Sync fork`, TypeScript vs. JavaScript, variables, tipos primitivos (`string`, `number`, `boolean`), **Scope**, **`null` vs. `undefined`**, condicionales (`if/else`) y bucles (`for`, `while`).
 - **Semana 2:** Funciones tipadas, `interface` y *union types* modernos (sin `enum`), **valor vs. referencia**, arrays y objetos, lectura de archivos `JSON` reales (`fs.readFileSync` + `JSON.parse`) y métodos fundamentales (`.map()`, `.filter()`, `.find()`, `.forEach()`).
-- **Semana 3:** **DOM (*Document Object Model*)**, eventos del navegador y DevTools (*Elements* + *Network*), **Event Loop conceptual**, arquitectura Web (Cliente vs. Servidor), protocolo HTTP (verbos, headers, códigos `200`, `400`, `401`, `404`, `500`), APIs REST y asincronía (`async/await`, `try/catch`, `fetch` primero en Node y luego en un esqueleto web).
+- **Semana 3:** **DOM (*Document Object Model*)**, eventos del navegador y DevTools (*Elements* + *Network*), **Event Loop conceptual**, arquitectura Web (Cliente vs. Servidor), protocolo HTTP (verbos, headers, códigos `200`, `400`, `401`, `404`, `500`), APIs REST, exploración con **Postman**, lectura básica de **OpenAPI / Swagger** y asincronía (`async/await`, `try/catch`, `fetch` primero en Node y luego en un esqueleto web).
 - **Semana 4 — Examen Eliminatorio 1:** Lógica pura en TypeScript + consumo de API pública (en pseudocódigo tipado). **Al finalizar el examen, quienes aprueban presentan su idea de MVP en 5 líneas para validar el alcance antes de arrancar React.**
 
 ### Fase 2: React, Bases de Datos SQL y Persistencia (Semanas 5 a 8)
@@ -60,7 +60,7 @@ Si te trabás de lunes a jueves, primero buscá en los recursos de la semana y *
 
 ### Fase 3: Seguridad, Roles, Backend Propio y Emancipación del MVP (Semanas 9 a 12)
 - **Semana 9:** Autenticación (Login / JWT) vs. Autorización (**roles `admin` y `usuario`**), **`localStorage` vs. `Cookies` (`HttpOnly`)**. Implementación de Supabase Auth, políticas *Row Level Security (RLS)* en SQL, vistas separadas (Panel Admin vs. Vista Usuario) y estado global con **Zustand**.
-- **Semana 10:** Backend propio en Node.js + Express (TypeScript). Creación de endpoints propios, middlewares, CORS, validación en servidor (*nunca confiar en el cliente*), **Rate Limiting** y validación obligatoria de sesión JWT y roles (`Authorization: Bearer <token>`).
+- **Semana 10:** Backend propio en Node.js + Express (TypeScript). Creación de endpoints propios, middlewares, CORS, validación en servidor (*nunca confiar en el cliente*), **Rate Limiting**, validación obligatoria de sesión JWT y roles (`Authorization: Bearer <token>`), pruebas aisladas y colecciones en **Postman**, y documentación de endpoints *(con mención y bonus opcional de **OpenAPI / Swagger**)*.
 - **Semana 11:** Recorte de alcance de **MVP (*Minimum Viable Product*)**, **Emancipación del MVP** (extraés tu carpeta `mvp/` a **tu propio repositorio independiente** en GitHub), **Deploy** en producción (Vercel + Render) y **Dominios y DNS** (cómo registrar un dominio `.com.ar` en NIC Argentina o `.com`, configurar registros `A`/`CNAME` en Vercel y habilitar HTTPS/SSL para entregar un sistema vendible con dirección propia).
 - **Semana 12 — Examen Final (Defensa del MVP):** Presentación del proyecto publicado en internet, auditoría de código y modificación en vivo.
 
@@ -69,7 +69,7 @@ Si te trabás de lunes a jueves, primero buscá en los recursos de la semana y *
 ## 5. Diccionario Obligatorio de la Industria
 
 Además de escribir código, vas a poder explicar con tus propias palabras:
-- **Web y Navegador:** Frontend, Backend, Base de Datos, **DOM (*Document Object Model*)**, **HTML semántico y Box Model**, **Responsive (*mobile-first*)**, **Event Loop conceptual**, HTTP (Request/Response, Status Codes), API, API REST, CORS, `fetch` (y Axios como alternativa), **Dominio, DNS (`A` / `CNAME`) y HTTPS/SSL**.
+- **Web y Navegador:** Frontend, Backend, Base de Datos, **DOM (*Document Object Model*)**, **HTML semántico y Box Model**, **Responsive (*mobile-first*)**, **Event Loop conceptual**, HTTP (Request/Response, Status Codes), API, API REST, **Postman (cliente HTTP)**, **OpenAPI / Swagger**, CORS, `fetch` (y Axios como alternativa), **Dominio, DNS (`A` / `CNAME`) y HTTPS/SSL**.
 - **Datos y React Moderno:** TypeScript vs. JavaScript, **Scope**, **`null` vs. `undefined`**, **Valor vs. Referencia**, JSON, CRUD, **Arquitectura relacional (DER / Normalización)**, SQL vs. NoSQL, PK/FK, Join, **DOM imperativo vs. React declarativo**, **los 4 estados de UI (*Loading, Empty, Error, Data*)**, Custom Hooks, *Server State* (TanStack Query) vs. *Client Global State* (Zustand / Redux).
 - **Seguridad:** Autenticación vs. Autorización, Roles, JWT / Bearer Token, RLS, **`localStorage` vs. `Cookies` (`HttpOnly`)**, **SQL Injection**, validación en servidor (*nunca confiar en el cliente*), **Rate Limiting** y variables de entorno (`.env`).
 - **Producto:** MVP, Deploy, Localhost vs. Producción, Git/GitHub, Fork y Pull Request.
@@ -82,7 +82,7 @@ En la **Semana 4** proponés un problema real de un comercio o servicio local (o
 1. Mínimo **2–3 tablas relacionadas (`1:N`)** creadas en SQL a mano (`schema.sql`), incluyendo tabla de perfiles/roles.
 2. **CRUD completo** en React + TypeScript + Tailwind + **Custom Hooks + TanStack Query + Zustand**.
 3. **Panel de Administrador y Vista de Usuario/Cliente** con Login/Registro, gestión de **roles** y políticas **RLS** reales en PostgreSQL.
-4. Al menos **1 o 2 endpoints propios en Node.js + Express** con validación de JWT y roles para reglas críticas de negocio o cierres/reportes.
+4. Al menos **1 o 2 endpoints propios en Node.js + Express** con validación de JWT y roles para reglas críticas de negocio o cierres/reportes, probados y documentados con **Postman** y `README.md`.
 5. **Repositorio propio e independiente** (emancipado en Semana 11) y **desplegado en internet** con URL pública funcionando en celular y PC.
 
 **Ideas recomendadas (vendibles a comercios/servicios locales):**

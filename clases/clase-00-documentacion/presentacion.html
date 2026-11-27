@@ -1,0 +1,833 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WTDev — Clase 0B: Cómo Leer Documentación</title>
+    <style>
+      :root {
+        --bg: #ffffff;
+        --surface: #fafafa;
+        --surface-2: #f4f4f5;
+        --hover: #efefef;
+        --border: #e5e5e5;
+        --border-strong: #d4d4d4;
+        --fg: #0a0a0a;
+        --muted: #525252;
+        --subtle: #737373;
+        --cta-bg: #0a0a0a;
+        --cta-fg: #ffffff;
+
+        --accent: #2563eb;
+        --accent-bg: #eff6ff;
+        --accent-border: #bfdbfe;
+
+        --ok-bg: #f0fdf4;
+        --ok-fg: #15803d;
+        --ok-border: #bbf7d0;
+
+        --err-bg: #fef2f2;
+        --err-fg: #b91c1c;
+        --err-border: #fecaca;
+
+        --warn-bg: #fffbeb;
+        --warn-fg: #b45309;
+        --warn-border: #fde68a;
+
+        --code-bg: #0f1117;
+        --code-fg: #e5e7eb;
+        --code-border: #1f2430;
+      }
+
+      :root.dark {
+        --bg: #000000;
+        --surface: #0a0a0a;
+        --surface-2: #121212;
+        --hover: #1a1a1a;
+        --border: #222222;
+        --border-strong: #333333;
+        --fg: #f5f5f5;
+        --muted: #a3a3a3;
+        --subtle: #737373;
+        --cta-bg: #ffffff;
+        --cta-fg: #000000;
+
+        --accent: #60a5fa;
+        --accent-bg: #0b1629;
+        --accent-border: #1e3a5f;
+
+        --ok-bg: #052e16;
+        --ok-fg: #86efac;
+        --ok-border: #14532d;
+
+        --err-bg: #2a0a0a;
+        --err-fg: #fca5a5;
+        --err-border: #7f1d1d;
+
+        --warn-bg: #1c1405;
+        --warn-fg: #fcd34d;
+        --warn-border: #451a03;
+
+        --code-bg: #090b10;
+        --code-fg: #f3f4f6;
+        --code-border: #222733;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--fg);
+        font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+
+      .progress-track {
+        height: 3px;
+        width: 100%;
+        background: var(--border);
+        flex-shrink: 0;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--accent), var(--fg));
+        transition: width 0.25s ease;
+      }
+
+      header {
+        height: 52px;
+        border-bottom: 1px solid var(--border);
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 13px;
+        flex-shrink: 0;
+        background: var(--bg);
+      }
+
+      .brand {
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .brand-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: var(--accent);
+        display: inline-block;
+      }
+
+      .pill {
+        font-size: 11px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        color: var(--muted);
+        border: 1px solid var(--border);
+        background: var(--surface);
+        padding: 3px 9px;
+        border-radius: 999px;
+      }
+
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      button {
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 500;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--fg);
+        padding: 6px 12px;
+        transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+      }
+
+      button:hover:not(:disabled) {
+        background: var(--hover);
+        border-color: var(--border-strong);
+      }
+
+      button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      button.primary {
+        background: var(--cta-bg);
+        color: var(--cta-fg);
+        border-color: var(--cta-bg);
+      }
+
+      button.primary:hover:not(:disabled) {
+        opacity: 0.88;
+      }
+
+      main {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 28px 24px;
+      }
+
+      section.slide {
+        display: none;
+        width: 100%;
+        max-width: 920px;
+        animation: fadeIn 0.22s ease;
+      }
+
+      section.slide.active {
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .eyebrow {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--accent);
+        background: var(--accent-bg);
+        border: 1px solid var(--accent-border);
+        padding: 4px 10px;
+        border-radius: 999px;
+        margin-bottom: 16px;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 4.4vw, 3.1rem);
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        margin-bottom: 16px;
+      }
+
+      h2 {
+        font-size: clamp(1.5rem, 3vw, 2.15rem);
+        line-height: 1.18;
+        letter-spacing: -0.025em;
+        margin-bottom: 12px;
+      }
+
+      h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      p.lead {
+        font-size: 1.08rem;
+        line-height: 1.6;
+        color: var(--muted);
+        max-width: 720px;
+        margin-bottom: 24px;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 18px 20px;
+      }
+
+      .card.ok {
+        background: var(--ok-bg);
+        border-color: var(--ok-border);
+      }
+
+      .card.ok h3 {
+        color: var(--ok-fg);
+      }
+
+      .card.err {
+        background: var(--err-bg);
+        border-color: var(--err-border);
+      }
+
+      .card.err h3 {
+        color: var(--err-fg);
+      }
+
+      .card.warn {
+        background: var(--warn-bg);
+        border-color: var(--warn-border);
+      }
+
+      .card.warn h3 {
+        color: var(--warn-fg);
+      }
+
+      ul.clean {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        color: var(--fg);
+      }
+
+      ul.clean li {
+        position: relative;
+        padding-left: 16px;
+      }
+
+      ul.clean li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.88em;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        padding: 1px 6px;
+        border-radius: 5px;
+      }
+
+      pre {
+        background: var(--code-bg);
+        color: var(--code-fg);
+        border: 1px solid var(--code-border);
+        border-radius: 10px;
+        padding: 14px 16px;
+        overflow-x: auto;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.86rem;
+        line-height: 1.55;
+      }
+
+      .step-num {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        border-radius: 999px;
+        background: var(--accent-bg);
+        border: 1px solid var(--accent-border);
+        color: var(--accent);
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
+      .search-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        font-size: 0.92rem;
+      }
+
+      .tag {
+        font-size: 11px;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+
+      .tag.bad {
+        background: var(--err-bg);
+        color: var(--err-fg);
+        border: 1px solid var(--err-border);
+      }
+
+      .tag.good {
+        background: var(--ok-bg);
+        color: var(--ok-fg);
+        border: 1px solid var(--ok-border);
+      }
+
+      /* Interactive Playground */
+      .demo-wrap {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        align-items: stretch;
+      }
+
+      .demo-stage {
+        background: var(--surface-2);
+        border: 1px dashed var(--border-strong);
+        border-radius: 12px;
+        min-height: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+
+      .demo-box {
+        width: 150px;
+        height: 150px;
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        user-select: none;
+      }
+
+      .slider-group {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .slider-row {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 13px;
+      }
+
+      .slider-label {
+        display: flex;
+        justify-content: space-between;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px;
+      }
+
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent);
+      }
+
+      footer {
+        height: 54px;
+        border-top: 1px solid var(--border);
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 12px;
+        color: var(--muted);
+        flex-shrink: 0;
+        background: var(--bg);
+      }
+
+      @media (max-width: 720px) {
+        .grid-2,
+        .grid-4,
+        .demo-wrap {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width: 14%"></div>
+    </div>
+
+    <header>
+      <div class="brand">
+        <span class="brand-dot"></span>
+        <span>WTDev</span>
+        <span class="pill">Clase 0B · Documentación</span>
+      </div>
+      <div class="controls">
+        <span class="pill" id="slideCounter">1 / 8</span>
+        <button type="button" id="themeBtn" title="Cambiar tema">Tema</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- SLIDE 1 -->
+      <section class="slide active">
+        <span class="eyebrow">Entrada en Calor · Clase 0B</span>
+        <h1>Cómo leer documentación y ser autodidacta</h1>
+        <p class="lead">
+          Saber programar no es memorizar todas las etiquetas y propiedades de memoria. Es saber
+          <strong>buscar, leer documentación oficial y probar hasta entender</strong> qué hace cada línea.
+        </p>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Lo que nos vamos a llevar hoy</h3>
+            <ul class="clean">
+              <li>Cómo navegar <strong>MDN Web Docs</strong> sin marearte.</li>
+              <li>Cómo googlear y el método <strong>"romper para entender"</strong>.</li>
+              <li>Comandos básicos de <strong>terminal</strong> para moverte sin miedo.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Tu misión al terminar</h3>
+            <ul class="clean">
+              <li>Investigar 6 propiedades/etiquetas en MDN.</li>
+              <li>Escribir tu propia mini-guía en <code>apuntes.md</code>.</li>
+              <li>Entregarla abriendo un <strong>Pull Request</strong>.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 2 -->
+      <section class="slide">
+        <span class="eyebrow">El hábito clave</span>
+        <h2>La trampa de copiar y pegar</h2>
+        <p class="lead">
+          Copiar un ejemplo sin entenderlo te ahorra 2 minutos hoy, pero te frena 2 horas mañana
+          cuando necesitás cambiar algo y no sabés qué tocar.
+        </p>
+        <div class="grid-2">
+          <div class="card err">
+            <h3>Copiar a ciegas</h3>
+            <ul class="clean">
+              <li>Pegás el bloque entero del ejemplo esperando que ande.</li>
+              <li>Si se rompe el diseño, empezás a probar cosas al azar.</li>
+              <li>En el siguiente proyecto no sabés por dónde arrancar.</li>
+            </ul>
+          </div>
+          <div class="card ok">
+            <h3>Leer, romper y entender</h3>
+            <ul class="clean">
+              <li>Leés qué hace la propiedad y qué valores acepta.</li>
+              <li>Cambiás 2 valores a propósito para ver qué pasa.</li>
+              <li>Podés explicarlo con tus palabras y adaptarlo a cualquier caso.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 3 -->
+      <section class="slide">
+        <span class="eyebrow">Mapa de MDN</span>
+        <h2>La documentación no se lee como un libro</h2>
+        <p class="lead">
+          Cuando abrís una página de <strong>MDN Web Docs</strong>, no leas todo de arriba a abajo.
+          Andá directo a estas 4 zonas en orden:
+        </p>
+        <div class="grid-4">
+          <div class="card">
+            <span class="step-num">1</span>
+            <h3>Descripción corta</h3>
+            <p style="color: var(--muted); font-size: 0.92rem; line-height: 1.5">
+              Las primeras 2 líneas te confirman si esa es la propiedad que estás buscando.
+            </p>
+          </div>
+          <div class="card">
+            <span class="step-num">2</span>
+            <h3>Ejemplo interactivo (Try it)</h3>
+            <p style="color: var(--muted); font-size: 0.92rem; line-height: 1.5">
+              Tocá los botones y cambiá valores ahí mismo. Es la forma más rápida de verlo en acción.
+            </p>
+          </div>
+          <div class="card">
+            <span class="step-num">3</span>
+            <h3>Sintaxis y valores</h3>
+            <p style="color: var(--muted); font-size: 0.92rem; line-height: 1.5">
+              Mirá qué unidades o palabras clave acepta (ej. <code>px</code>, <code>%</code>, <code>center</code>).
+            </p>
+          </div>
+          <div class="card warn">
+            <span class="step-num">4</span>
+            <h3>Qué saltear al principio</h3>
+            <p style="color: var(--muted); font-size: 0.92rem; line-height: 1.5">
+              Ignorá especificaciones W3C y tablas históricas de navegadores viejos.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 4 -->
+      <section class="slide">
+        <span class="eyebrow">Búsqueda efectiva</span>
+        <h2>Cómo googlear como un dev</h2>
+        <p class="lead">
+          Usá siempre la fórmula: <code>tecnología + qué querés lograr + mdn</code>.
+          En inglés suele haber más resultados, pero MDN tiene gran parte traducida al español.
+        </p>
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <div class="search-row">
+            <span>"como hago para que los bordes de mi caja no sean cuadrados en la pagina"</span>
+            <span class="tag bad">Muy largo</span>
+          </div>
+          <div class="search-row">
+            <span><code>css border radius mdn</code></span>
+            <span class="tag good">Directo al grano</span>
+          </div>
+          <div class="search-row">
+            <span><code>css center items flexbox mdn</code></span>
+            <span class="tag good">Directo al grano</span>
+          </div>
+          <div class="search-row">
+            <span><code>css box shadow mdn</code></span>
+            <span class="tag good">Directo al grano</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 5 -->
+      <section class="slide">
+        <span class="eyebrow">Demo en vivo</span>
+        <h2>Romper para entender</h2>
+        <p class="lead">
+          Mové los controles y mirá qué pasa con el CSS y con la caja. Así se prueba una propiedad
+          después de leer su documentación:
+        </p>
+        <div class="demo-wrap">
+          <div class="demo-stage">
+            <div class="demo-box" id="demoBox">Caja</div>
+          </div>
+          <div class="card slider-group">
+            <div class="slider-row">
+              <div class="slider-label">
+                <span>border-radius</span>
+                <span id="valRadius">12px</span>
+              </div>
+              <input type="range" id="inRadius" min="0" max="75" value="12" />
+            </div>
+            <div class="slider-row">
+              <div class="slider-label">
+                <span>opacity</span>
+                <span id="valOpacity">1.00</span>
+              </div>
+              <input type="range" id="inOpacity" min="15" max="100" value="100" />
+            </div>
+            <div class="slider-row">
+              <div class="slider-label">
+                <span>rotate (transform)</span>
+                <span id="valRotate">0deg</span>
+              </div>
+              <input type="range" id="inRotate" min="-45" max="45" value="0" />
+            </div>
+            <pre id="demoCode">.caja {
+  border-radius: 12px;
+  opacity: 1;
+  transform: rotate(0deg);
+}</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 6 -->
+      <section class="slide">
+        <span class="eyebrow">Terminal básica</span>
+        <h2>Supervivencia en la Terminal</h2>
+        <p class="lead">
+          La terminal no muerde: es lo mismo que el explorador de carpetas de Windows/Mac, pero con
+          texto. Estos <strong>6 comandos</strong> te resuelven el 90% del día a día:
+        </p>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Navegar y crear carpetas</h3>
+            <ul class="clean">
+              <li><code>pwd</code> — muestra <strong>en qué carpeta estás parado</strong>.</li>
+              <li><code>ls</code> — lista los archivos y carpetas de ese lugar.</li>
+              <li><code>cd carpeta</code> — entra a una carpeta (<code>cd ..</code> sube un nivel).</li>
+              <li><code>mkdir nombre</code> — crea una carpeta nueva.</li>
+              <li><code>clear</code> — limpia la pantalla cuando hay mucho texto.</li>
+            </ul>
+          </div>
+          <div class="card warn">
+            <h3>Atajos y error #1</h3>
+            <ul class="clean">
+              <li><strong><code>Tab</code>:</strong> autocompleta nombres de carpetas y archivos (evitá tipear todo a mano).</li>
+              <li><strong>Flechas <code>↑</code> / <code>↓</code>:</strong> recuperan comandos que ya escribiste.</li>
+              <li><strong><code>Ctrl + C</code>:</strong> frena un comando que se quedó colgado.</li>
+              <li><strong>Error #1:</strong> correr <code>git</code> o <code>node</code> parado en la carpeta equivocada. Chequeá siempre con <code>pwd</code> y <code>ls</code>.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 7 -->
+      <section class="slide">
+        <span class="eyebrow">Consigna práctica</span>
+        <h2>Armá tu propia documentación</h2>
+        <p class="lead">
+          Creá <code>entregas/&lt;tu-usuario&gt;/clase-00-documentacion/apuntes.md</code> y documentá
+          <strong>al menos 6 temas</strong> investigados en MDN:
+        </p>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Qué temas incluir</h3>
+            <ul class="clean">
+              <li><strong>3 temas que ya usamos:</strong> <code>width</code> en <code>%</code>, <code>flex-direction</code>, <code>justify-content</code>, <code>align-items</code>, selectores (<code>a img</code> vs <code>.clase</code>).</li>
+              <li><strong>3 propiedades nuevas:</strong> buscadas desde cero en MDN (ej. <code>border-radius</code>, <code>box-shadow</code>, <code>opacity</code>, <code>cursor</code>, <code>:hover</code>, <code>gap</code>).</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Cada ficha debe tener</h3>
+            <ul class="clean">
+              <li>Enlace oficial a <strong>MDN</strong>.</li>
+              <li>Explicación <strong>con tus palabras</strong> (sin copiar).</li>
+              <li>2 o 3 valores principales.</li>
+              <li>Un <strong>ejemplo propio</strong> + qué probaste o descubriste.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 8 -->
+      <section class="slide">
+        <span class="eyebrow">Entrega en GitHub</span>
+        <h2>Subilo como Pull Request</h2>
+        <p class="lead">
+          Recordá trabajar <strong>solo dentro de tu carpeta</strong> para que el check automático
+          <code>evaluar-pr</code> quede en verde.
+        </p>
+        <pre># 1. Chequeá que estás en curso-repo, actualizá y creá la rama
+pwd
+git checkout main
+git pull origin main
+git checkout -b entrega/clase-00-documentacion
+
+# 2. Creá tu carpeta desde la terminal y armá apuntes.md adentro
+mkdir entregas/&lt;tu-usuario&gt;/clase-00-documentacion
+
+# 3. Guardá y subí tus cambios
+git add .
+git commit -m "docs: apuntes de lectura de documentacion"
+git push origin entrega/clase-00-documentacion</pre>
+        <p style="margin-top: 14px; font-size: 0.92rem; color: var(--muted)">
+          Después entrá a tu fork en GitHub → <strong>Compare &amp; pull request</strong> → completá la plantilla (declaración honesta de IA incluida).
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <span>Usá ← y → para navegar</span>
+      <div class="controls">
+        <button type="button" id="prevBtn">← Anterior</button>
+        <button type="button" id="nextBtn" class="primary">Siguiente →</button>
+      </div>
+    </footer>
+
+    <script>
+      const slides = Array.from(document.querySelectorAll('section.slide'));
+      const counter = document.getElementById('slideCounter');
+      const progress = document.getElementById('progressFill');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const themeBtn = document.getElementById('themeBtn');
+
+      let current = 0;
+
+      function render() {
+        slides.forEach((s, i) => s.classList.toggle('active', i === current));
+        counter.textContent = `${current + 1} / ${slides.length}`;
+        progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+        prevBtn.disabled = current === 0;
+        nextBtn.disabled = current === slides.length - 1;
+      }
+
+      function go(delta) {
+        const next = Math.max(0, Math.min(slides.length - 1, current + delta));
+        if (next !== current) {
+          current = next;
+          render();
+        }
+      }
+
+      prevBtn.addEventListener('click', () => go(-1));
+      nextBtn.addEventListener('click', () => go(1));
+
+      window.addEventListener('keydown', (e) => {
+        if (e.target && ['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+          e.preventDefault();
+          go(1);
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          go(-1);
+        }
+      });
+
+      themeBtn.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+      });
+
+      // Demo interactiva Slide 5
+      const demoBox = document.getElementById('demoBox');
+      const demoCode = document.getElementById('demoCode');
+      const inRadius = document.getElementById('inRadius');
+      const inOpacity = document.getElementById('inOpacity');
+      const inRotate = document.getElementById('inRotate');
+      const valRadius = document.getElementById('valRadius');
+      const valOpacity = document.getElementById('valOpacity');
+      const valRotate = document.getElementById('valRotate');
+
+      function updateDemo() {
+        const r = inRadius.value;
+        const o = (Number(inOpacity.value) / 100).toFixed(2);
+        const rot = inRotate.value;
+
+        valRadius.textContent = `${r}px`;
+        valOpacity.textContent = o;
+        valRotate.textContent = `${rot}deg`;
+
+        demoBox.style.borderRadius = `${r}px`;
+        demoBox.style.opacity = o;
+        demoBox.style.transform = `rotate(${rot}deg)`;
+
+        demoCode.textContent = `.caja {\n  border-radius: ${r}px;\n  opacity: ${o};\n  transform: rotate(${rot}deg);\n}`;
+      }
+
+      inRadius.addEventListener('input', updateDemo);
+      inOpacity.addEventListener('input', updateDemo);
+      inRotate.addEventListener('input', updateDemo);
+      updateDemo();
+      render();
+    </script>
+  </body>
+</html>

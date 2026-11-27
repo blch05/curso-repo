@@ -19,7 +19,8 @@ Repositorio oficial del curso práctico de 12 semanas. Acá encontrás todas las
 
 | Clase / Semana | Fase | Tema                                                              | Consigna                                       |
 | :------------- | :--: | :---------------------------------------------------------------- | :--------------------------------------------- |
-| **Clase 0**    |  0   | Entrada en Calor: HTML + CSS + Primer PR                          | [Ver consigna](./clases/clase-00/consigna.md)  |
+| **Clase 0**    |  0   | Entrada en Calor: HTML + CSS + Primer PR                          | [Ver consigna](./clases/clase-00/consigna.md)               |
+| **Clase 0B**   |  0   | Entrada en Calor: Lectura de Documentación y Autodidactismo       | [Ver consigna](./clases/clase-00-documentacion/consigna.md) |
 | **Semana 1**   |  1   | TypeScript: Variables, Tipos, Condicionales y Bucles              | [Ver consigna](./clases/semana-01/consigna.md) |
 | **Semana 2**   |  1   | Funciones Tipadas, Interfaces, Arrays y JSON                      | [Ver consigna](./clases/semana-02/consigna.md) |
 | **Semana 3**   |  1   | Arquitectura Web, HTTP, APIs REST y Asincronía                    | [Ver consigna](./clases/semana-03/consigna.md) |
