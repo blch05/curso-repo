@@ -1,0 +1,92 @@
+
+* {
+  box-sizing: border-box;
+  margin: 10px;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: #ffffff;
+  color: #121312;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.foto {
+  width: 50%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 30px;
+  margin-bottom: 40px;
+}
+
+h1 {
+    font-size: 50px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: #086b19;
+}
+
+.negros {
+    font-size: 25px;
+    font-family: 'Times New Roman', Times, serif;
+    color: #00520f;
+}
+
+p {
+    font-size: 20px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.rojas {
+    color: red;
+}
+
+.verdes {
+    color: green;
+}
+
+.naranjas {
+    color: orange;
+}
+
+.blancas {
+    color: black;
+}
+
+a img {
+    max-height: 50px;
+}
+
+.box {
+    width: 300px;
+    height: 300px;
+    background-color: rgb(255, 255, 255);
+    border: 2px solid black;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.info {
+    font-size: 25px;
+    font-family: 'Times New Roman', Times, serif;
+    color: #00520f;
+    display: block;
+    padding: 10px;
+    max-width: 100%;
+}
+
+/* BOX DE PRESENTACIÓN */
+
+.presentacion {
+    width: 85%;
+    background-color: #e8f5e9;
+    border: 2px solid #086b19;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 20px auto;
+    text-align: center;
+}
