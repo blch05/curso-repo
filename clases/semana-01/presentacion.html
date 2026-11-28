@@ -1,0 +1,1750 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WTDev — Semana 1: TypeScript desde Cero, Sin Magia</title>
+    <style>
+      :root {
+        --bg: #ffffff;
+        --surface: #fafafa;
+        --surface-2: #f4f4f5;
+        --hover: #efefef;
+        --border: #e5e5e5;
+        --border-strong: #d4d4d4;
+        --fg: #0a0a0a;
+        --muted: #525252;
+        --subtle: #737373;
+        --cta-bg: #0a0a0a;
+        --cta-fg: #ffffff;
+
+        /* Semantic accents */
+        --ts: #2563eb;
+        --ts-bg: #eff6ff;
+        --ts-border: #bfdbfe;
+
+        --node: #15803d;
+        --node-bg: #f0fdf4;
+        --node-border: #bbf7d0;
+
+        --js: #ca8a04;
+        --js-bg: #fefce8;
+        --js-border: #fef08a;
+
+        --err: #dc2626;
+        --err-bg: #fef2f2;
+        --err-border: #fecaca;
+
+        --ok-bg: #f0fdf4;
+        --ok-fg: #15803d;
+        --ok-border: #bbf7d0;
+
+        --warn-bg: #fffbeb;
+        --warn-fg: #b45309;
+        --warn-border: #fde68a;
+
+        --accent: #2563eb;
+        --code-bg: #0f1117;
+        --code-fg: #e5e7eb;
+        --code-border: #1f2430;
+        --code-muted: #9ca3af;
+      }
+
+      :root.dark {
+        --bg: #000000;
+        --surface: #0a0a0a;
+        --surface-2: #121212;
+        --hover: #1a1a1a;
+        --border: #222222;
+        --border-strong: #333333;
+        --fg: #f5f5f5;
+        --muted: #a3a3a3;
+        --subtle: #737373;
+        --cta-bg: #ffffff;
+        --cta-fg: #000000;
+
+        --ts: #60a5fa;
+        --ts-bg: #0b1629;
+        --ts-border: #1e3a5f;
+
+        --node: #4ade80;
+        --node-bg: #052e16;
+        --node-border: #14532d;
+
+        --js: #facc15;
+        --js-bg: #1c1806;
+        --js-border: #423306;
+
+        --err: #f87171;
+        --err-bg: #2a0a0a;
+        --err-border: #7f1d1d;
+
+        --ok-bg: #052e16;
+        --ok-fg: #86efac;
+        --ok-border: #14532d;
+
+        --warn-bg: #1c1405;
+        --warn-fg: #fcd34d;
+        --warn-border: #451a03;
+
+        --accent: #60a5fa;
+        --code-bg: #090b10;
+        --code-fg: #f3f4f6;
+        --code-border: #222733;
+        --code-muted: #9ca3af;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      @supports not selector(::-webkit-scrollbar) {
+        * {
+          scrollbar-width: thin;
+          scrollbar-color: var(--border-strong) transparent;
+        }
+        pre.code-block {
+          scrollbar-color: #2f3646 transparent;
+        }
+      }
+
+      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background-color: var(--border-strong); border-radius: 999px; }
+      ::-webkit-scrollbar-thumb:hover { background-color: var(--subtle); }
+      ::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+      ::-webkit-scrollbar-corner { background: transparent; }
+
+      html, body { height: 100%; }
+
+      body {
+        background: var(--bg);
+        color: var(--fg);
+        font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+
+      /* Progress bar */
+      .progress-track {
+        height: 3px;
+        width: 100%;
+        background: var(--border);
+        flex-shrink: 0;
+      }
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--accent), var(--fg));
+        transition: width 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      /* Header */
+      header {
+        height: 52px;
+        border-bottom: 1px solid var(--border);
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 13px;
+        flex-shrink: 0;
+        background: var(--bg);
+        z-index: 10;
+      }
+
+      .brand {
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .brand-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: var(--accent);
+        display: inline-block;
+      }
+
+      .pill {
+        font-size: 11px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        color: var(--muted);
+        border: 1px solid var(--border);
+        background: var(--surface);
+        padding: 3px 9px;
+        border-radius: 999px;
+      }
+      .pill-btn {
+        cursor: pointer;
+        transition: background 0.15s, border-color 0.15s;
+      }
+      .pill-btn:hover {
+        background: var(--hover);
+        border-color: var(--border-strong);
+      }
+
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      button {
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 500;
+        border-radius: 7px;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        color: var(--fg);
+        padding: 6px 11px;
+        transition: background 0.15s, border-color 0.15s, opacity 0.15s, transform 0.1s;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+      button:hover:not(:disabled) {
+        background: var(--hover);
+        border-color: var(--border-strong);
+      }
+      button:active:not(:disabled) { transform: translateY(1px); }
+      button:disabled { opacity: 0.35; cursor: not-allowed; }
+      button.primary {
+        background: var(--cta-bg);
+        color: var(--cta-fg);
+        border-color: transparent;
+      }
+      button.primary:hover:not(:disabled) { opacity: 0.88; background: var(--cta-bg); }
+      button.chip {
+        font-size: 11.5px;
+        padding: 5px 11px;
+        border-radius: 999px;
+      }
+      button.chip.active {
+        background: var(--cta-bg);
+        color: var(--cta-fg);
+        border-color: transparent;
+      }
+
+      /* Main stage */
+      main {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px 28px;
+        overflow-y: auto;
+      }
+
+      .slide {
+        display: none;
+        width: 100%;
+        max-width: 980px;
+        animation: fadeIn 0.22s ease;
+      }
+      .slide.wide { max-width: 1140px; }
+      .slide.active { display: block; }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* Typography */
+      .eyebrow {
+        font-size: 11.5px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        color: var(--accent);
+        margin-bottom: 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .eyebrow.err { color: var(--err); }
+      .eyebrow.ok { color: var(--node); }
+
+      h1 {
+        font-size: clamp(2.1rem, 4.4vw, 3.3rem);
+        line-height: 1.08;
+        letter-spacing: -0.035em;
+        font-weight: 800;
+        margin-bottom: 16px;
+      }
+      h2 {
+        font-size: clamp(1.45rem, 2.7vw, 2.1rem);
+        line-height: 1.15;
+        letter-spacing: -0.025em;
+        font-weight: 750;
+        margin-bottom: 10px;
+      }
+      .lead {
+        font-size: 15.5px;
+        line-height: 1.58;
+        color: var(--muted);
+        max-width: 70ch;
+      }
+
+      /* Tags */
+      .hero-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 22px;
+      }
+      .tag {
+        font-size: 12px;
+        font-weight: 600;
+        padding: 5px 11px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        color: var(--fg);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .tag.ts { color: var(--ts); background: var(--ts-bg); border-color: var(--ts-border); }
+      .tag.node { color: var(--node); background: var(--node-bg); border-color: var(--node-border); }
+      .tag.js { color: var(--js); background: var(--js-bg); border-color: var(--js-border); }
+      .tag.err { color: var(--err); background: var(--err-bg); border-color: var(--err-border); }
+
+      /* Grids & cards */
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+        gap: 14px;
+        margin-top: 18px;
+      }
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 14px;
+        margin-top: 18px;
+      }
+      .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .card {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        border-radius: 12px;
+        padding: 16px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+      .card.accent-ts { border-top: 3px solid var(--ts); }
+      .card.accent-node { border-top: 3px solid var(--node); }
+      .card.accent-js { border-top: 3px solid var(--js); }
+      .card.accent-err { border-top: 3px solid var(--err); }
+
+      .card h3 { font-size: 15px; font-weight: 650; }
+      .card p, .card li { font-size: 13.5px; line-height: 1.55; color: var(--muted); }
+      .card strong { color: var(--fg); }
+
+      .phase-num {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .phase-num.err { color: var(--err); }
+      .phase-num.node { color: var(--node); }
+
+      /* Lists */
+      ul.clean {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+        margin-top: 16px;
+      }
+      ul.clean li {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        border-radius: 9px;
+        padding: 11px 14px;
+        font-size: 14px;
+        line-height: 1.5;
+        color: var(--muted);
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      ul.clean li strong { color: var(--fg); }
+
+      .num-badge {
+        flex-shrink: 0;
+        width: 22px;
+        height: 22px;
+        border-radius: 6px;
+        background: var(--cta-bg);
+        color: var(--cta-fg);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 1px;
+      }
+
+      /* Code */
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.88em;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        padding: 1px 5px;
+        border-radius: 4px;
+        color: var(--fg);
+      }
+
+      pre.code-block {
+        margin-top: 12px;
+        padding: 14px 16px;
+        border-radius: 10px;
+        border: 1px solid var(--code-border);
+        background: var(--code-bg);
+        color: var(--code-fg);
+        overflow-x: auto;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 13px;
+        line-height: 1.65;
+      }
+      pre.code-block code {
+        background: transparent;
+        border: none;
+        padding: 0;
+        color: inherit;
+        font-size: inherit;
+      }
+
+      .tok-kw { color: #c084fc; }
+      .tok-type { color: #60a5fa; }
+      .tok-str { color: #4ade80; }
+      .tok-num { color: #fbbf24; }
+      .tok-cmt { color: #6b7280; font-style: italic; }
+      .tok-err {
+        text-decoration: wavy underline #ef4444;
+        text-underline-offset: 3px;
+      }
+      .tok-ghost {
+        opacity: 0.16;
+        text-decoration: line-through;
+        transition: opacity 0.25s ease;
+      }
+
+      /* Callouts */
+      .callout {
+        margin-top: 14px;
+        padding: 12px 15px;
+        border-radius: 9px;
+        font-size: 13.5px;
+        line-height: 1.5;
+        border: 1px solid var(--warn-border);
+        background: var(--warn-bg);
+        color: var(--warn-fg);
+      }
+      .callout.ok {
+        border-color: var(--ok-border);
+        background: var(--ok-bg);
+        color: var(--ok-fg);
+      }
+      .callout.err {
+        border-color: var(--err-border);
+        background: var(--err-bg);
+        color: var(--err);
+      }
+      .callout.ts {
+        border-color: var(--ts-border);
+        background: var(--ts-bg);
+        color: var(--ts);
+      }
+
+      /* Interactive panels */
+      .panel {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        border-radius: 12px;
+        overflow: hidden;
+        margin-top: 16px;
+      }
+      .panel-bar {
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+        background: var(--surface-2);
+      }
+      .panel-body {
+        padding: 16px;
+      }
+      .btn-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      /* Widget #1: Anti-Magic Pipeline */
+      .pipeline-steps {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+      @media (max-width: 760px) {
+        .pipeline-steps { grid-template-columns: 1fr; }
+      }
+      .pipe-step {
+        text-align: left;
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        width: 100%;
+      }
+      .pipe-step.active {
+        border-color: var(--accent);
+        background: var(--ts-bg);
+        box-shadow: 0 0 0 1px var(--accent);
+      }
+      .pipe-step .ps-k {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--accent);
+      }
+      .pipe-step .ps-t {
+        font-size: 13.5px;
+        font-weight: 700;
+        color: var(--fg);
+      }
+      .pipe-step .ps-d {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+
+      .split-2 {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 14px;
+        align-items: stretch;
+      }
+      @media (max-width: 820px) {
+        .split-2 { grid-template-columns: 1fr; }
+      }
+
+      .terminal-box {
+        background: var(--code-bg);
+        border: 1px solid var(--code-border);
+        border-radius: 10px;
+        padding: 14px 16px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12.5px;
+        line-height: 1.6;
+        color: var(--code-fg);
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .term-prompt { color: #4ade80; }
+      .term-err { color: #f87171; }
+      .term-warn { color: #fbbf24; }
+      .term-muted { color: #9ca3af; }
+      .term-hl {
+        background: rgba(239, 68, 68, 0.16);
+        border-left: 3px solid #ef4444;
+        padding: 6px 10px;
+        border-radius: 4px;
+        color: #fecaca;
+      }
+      .term-ok {
+        background: rgba(34, 197, 94, 0.14);
+        border-left: 3px solid #22c55e;
+        padding: 6px 10px;
+        border-radius: 4px;
+        color: #bbf7d0;
+      }
+
+      /* Scope rooms diagram */
+      .scope-outer {
+        border: 2px dashed var(--ts);
+        background: var(--ts-bg);
+        border-radius: 12px;
+        padding: 14px;
+        margin-top: 10px;
+      }
+      .scope-inner {
+        border: 2px solid var(--node);
+        background: var(--bg);
+        border-radius: 9px;
+        padding: 12px;
+        margin-top: 10px;
+      }
+      .scope-label {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 6px;
+        display: block;
+      }
+
+      /* Widget #2: Conditionals Simulator */
+      .sim-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        align-items: center;
+        margin-bottom: 14px;
+      }
+      .sim-field {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 12.5px;
+      }
+      .sim-field label { color: var(--muted); font-weight: 600; }
+      .sim-field input[type="range"] { width: 190px; accent-color: var(--accent); }
+
+      .branch-line {
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12.5px;
+        line-height: 1.5;
+        border-left: 3px solid transparent;
+        transition: background 0.18s, border-color 0.18s, opacity 0.18s;
+      }
+      .branch-line.hit {
+        background: rgba(34, 197, 94, 0.16);
+        border-left-color: #22c55e;
+        color: #ffffff;
+      }
+      .branch-line.skip { opacity: 0.48; }
+      .branch-line.bug-hit {
+        background: rgba(245, 158, 11, 0.2);
+        border-left-color: #f59e0b;
+        color: #fef3c7;
+      }
+
+      /* Widget #3: Interactive Trace Table */
+      .trace-code {
+        background: var(--code-bg);
+        border: 1px solid var(--code-border);
+        border-radius: 10px;
+        padding: 10px 0;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 13px;
+        line-height: 1.75;
+        color: var(--code-fg);
+      }
+      .trace-line {
+        display: flex;
+        gap: 12px;
+        padding: 1px 14px;
+        border-left: 3px solid transparent;
+        transition: background 0.15s;
+      }
+      .trace-line .ln {
+        color: #6b7280;
+        width: 18px;
+        text-align: right;
+        user-select: none;
+        flex-shrink: 0;
+      }
+      .trace-line.active {
+        background: rgba(59, 130, 246, 0.24);
+        border-left-color: #60a5fa;
+      }
+
+      .mem-boxes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .mem-box {
+        border: 1px solid var(--border);
+        background: var(--bg);
+        border-radius: 9px;
+        padding: 8px 12px;
+        min-width: 105px;
+      }
+      .mem-box .mk {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .mem-box .mv {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--accent);
+      }
+
+      table.trace-tbl {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12.5px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+      table.trace-tbl th, table.trace-tbl td {
+        border: 1px solid var(--border);
+        padding: 6px 9px;
+        text-align: center;
+      }
+      table.trace-tbl th {
+        background: var(--surface-2);
+        color: var(--muted);
+        font-weight: 700;
+      }
+      table.trace-tbl tr.latest td {
+        background: var(--ts-bg);
+        color: var(--fg);
+        font-weight: 700;
+      }
+
+      /* Consigna 12 exercises grid */
+      .ex-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 12px;
+        margin-top: 14px;
+      }
+      .ex-col {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        border-radius: 11px;
+        padding: 14px;
+      }
+      .ex-col h3 {
+        font-size: 13px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        color: var(--accent);
+        margin-bottom: 9px;
+      }
+      .ex-col ol {
+        padding-left: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        font-size: 12.5px;
+        line-height: 1.45;
+        color: var(--muted);
+      }
+      .ex-col ol strong { color: var(--fg); }
+
+      /* Overview modal */
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        z-index: 50;
+      }
+      .modal-backdrop.open { display: flex; }
+      .modal {
+        width: 100%;
+        max-width: 740px;
+        max-height: 82vh;
+        overflow-y: auto;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 20px;
+      }
+      .modal-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+      }
+      .modal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 10px;
+      }
+      .slide-thumb {
+        text-align: left;
+        padding: 12px;
+        border-radius: 9px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+      .slide-thumb.current {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 1px var(--accent);
+      }
+      .slide-thumb .st-num {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        color: var(--accent);
+        font-weight: 700;
+      }
+      .slide-thumb .st-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--fg);
+      }
+
+      /* Footer */
+      footer {
+        height: 52px;
+        border-top: 1px solid var(--border);
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 12px;
+        color: var(--subtle);
+        flex-shrink: 0;
+        background: var(--bg);
+      }
+      @media (max-width: 640px) {
+        .shortcuts-hint { display: none; }
+        main { padding: 16px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="progress-track"><div id="progress" class="progress-fill"></div></div>
+
+    <header>
+      <div class="brand">
+        <span class="brand-dot"></span>
+        <span>WTDev · Semana 1</span>
+        <button id="counterBtn" type="button" class="pill pill-btn" title="Abrir índice (G)">1 / 13</button>
+      </div>
+      <div class="controls">
+        <button id="themeBtn" type="button" title="Cambiar tema (T)">OLED</button>
+        <button id="fsBtn" type="button" title="Pantalla completa (F)">Pantalla completa</button>
+      </div>
+    </header>
+
+    <main id="stage">
+      <!-- SLIDE 1: PORTADA -->
+      <section class="slide active" data-title="Portada · Semana 1">
+        <p class="eyebrow">Fase 1 · Lógica Pura en TypeScript</p>
+        <h1>TypeScript desde cero,<br />sin magia.</h1>
+        <p class="lead">
+          Hoy dejamos atrás la caja negra: auditamos sus primeros Pull Requests como en un equipo real, entendemos qué hace tu computadora cuando corrés <code>node archivo.ts</code> y construimos la base de lógica que sostiene las próximas 11 semanas.
+        </p>
+        <div class="hero-tags">
+          <span class="tag ts">Viernes (2 hs) · Auditoría + Teoría</span>
+          <span class="tag node">Domingo (2 hs) · Laboratorio en Vivo</span>
+          <span class="tag js">Node.js LTS · Type Stripping</span>
+          <span class="tag err">Regla: Cero <code>any</code> · Sin funciones aún</span>
+        </div>
+      </section>
+
+      <!-- SLIDE 2: CODE REVIEW REAL (PRs CLASE 0) -->
+      <section class="slide" data-title="Viernes · Code Review Real">
+        <p class="eyebrow err">Viernes · Bloque 1 · Revisión de Entregas</p>
+        <h2>Tu primera Code Review de verdad</h2>
+        <p class="lead">
+          En la industria, que algo "se vea lindo" no alcanza para entrar a <code>main</code>. Todo Pull Request pasa por revisión línea por línea.
+        </p>
+        <div class="grid-4">
+          <div class="card accent-err">
+            <span class="phase-num err">Paso 01</span>
+            <h3>Defensa en <code>Files changed</code></h3>
+            <p>Te señalamos 3 líneas de tu código y explicás qué hacen con tus palabras. Si no sabés por qué están ahí, esa entrega vale <strong>0</strong>.</p>
+          </div>
+          <div class="card accent-js">
+            <span class="phase-num">Paso 02</span>
+            <h3><code>Request Changes</code></h3>
+            <p>Dejamos comentarios técnicos reales (semántica, <code>box-sizing</code>, <code>alt</code>, mensajes de commit) antes de aprobar.</p>
+          </div>
+          <div class="card accent-ts">
+            <span class="phase-num">Paso 03</span>
+            <h3>Fix en vivo (sin IA)</h3>
+            <p>Corregís en VS Code y subís un nuevo commit desde la terminal a la misma rama. El PR se actualiza solo.</p>
+          </div>
+          <div class="card accent-node">
+            <span class="phase-num node">Paso 04</span>
+            <h3>Approve &amp; Merge</h3>
+            <p>Con el check verde y las observaciones resueltas, mergeamos a <code>main</code> y sincronizamos el Fork.</p>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>Dato real del rubro:</strong> te van a pedir cambios en PRs toda tu carrera. El primer filtro no es saberlo todo hoy, sino cómo reaccionás cuando te corrigen el código.
+        </div>
+      </section>
+
+      <!-- SLIDE 3: TERMINAL PARA NODE Y TYPESCRIPT -->
+      <section class="slide wide" data-title="Viernes · Terminal TS & Stack Trace">
+        <p class="eyebrow">Viernes · Bloque 2 · Terminal orientada a Node y TS</p>
+        <h2>Ejecutar <code>.ts</code> y leer errores sin entrar en pánico</h2>
+        <div class="split-2" style="margin-top: 16px;">
+          <div class="card">
+            <h3>Flujo diario en la terminal</h3>
+            <p><strong>1. Parate en tu carpeta de trabajo:</strong></p>
+            <pre class="code-block" style="margin-top: 4px;"><code>cd entregas/tu-usuario/semana-01
+pwd
+ls</code></pre>
+            <p style="margin-top: 8px;"><strong>2. Corré tu archivo con Node LTS:</strong></p>
+            <pre class="code-block" style="margin-top: 4px;"><code>node 01-presentacion.ts</code></pre>
+            <ul class="clean" style="margin-top: 10px;">
+              <li><span class="num-badge">Tab</span><span>Autocompleta nombres de archivos <code>.ts</code> y carpetas.</span></li>
+              <li><span class="num-badge">↑</span><span>Repite el último <code>node ...</code> después de guardar (<code>Ctrl + S</code>).</span></li>
+              <li><span class="num-badge">^C</span><span><code>Ctrl + C</code> frena al instante un bucle infinito.</span></li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Cómo leer un Stack Trace en 3 datos</h3>
+            <p>Cuando Node explota, leé <strong>de arriba hacia abajo</strong>:</p>
+            <div class="terminal-box" style="margin-top: 8px;">
+              <div><span class="term-prompt">$</span> node demo.ts</div>
+              <div class="term-hl"><strong>1. Dónde:</strong> .../semana-01/demo.ts:<strong>4</strong></div>
+              <div>const edad: number = 25;</div>
+              <div>edad = 26;</div>
+              <div class="term-warn">     ^  <strong>← 2. Línea exacta del problema</strong></div>
+              <div class="term-hl"><strong>3. Por qué:</strong> TypeError: Assignment to constant variable.</div>
+            </div>
+            <div class="callout err" style="margin-top: 12px;">
+              <strong>Error #1 de principiante:</strong> <code>Cannot find module</code> casi siempre significa que estás parado en otra carpeta. Tirás <code>pwd</code> y <code>ls</code> y lo resolvés en 3 segundos.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 4: INTERACTIVO #1 — SIN MAGIA (VS CODE vs NODE vs V8) -->
+      <section class="slide wide" data-title="Interactivo · Sin Magia (TS vs Node)">
+        <p class="eyebrow">Viernes · Bloque 3 · Interactivo #1</p>
+        <h2>Sin magia: qué pasa en tu PC cuando corrés TypeScript</h2>
+        <p class="lead">
+          Tu procesador solo entiende ceros y unos. Tocá cada etapa del pipeline y alterná entre código válido y código con error de tipo para ver qué hace <strong>VS Code</strong> y qué hace <strong>Node.js</strong>.
+        </p>
+
+        <div class="panel">
+          <div class="panel-bar">
+            <div class="btn-group">
+              <button id="amValidBtn" type="button" class="chip active">Ejemplo 1: Código válido</button>
+              <button id="amErrBtn" type="button" class="chip">Ejemplo 2: Error de tipo (¡Demo Anti-Magia!)</button>
+            </div>
+            <span class="pill">Hacé clic en las 3 etapas ↓</span>
+          </div>
+          <div class="panel-body">
+            <div class="pipeline-steps">
+              <button type="button" class="pipe-step active" data-am-stage="0">
+                <span class="ps-k">ETAPA 1 · AL ESCRIBIR</span>
+                <span class="ps-t">VS Code (<code>tsserver</code>)</span>
+                <span class="ps-d">Analiza tus tipos en vivo sin ejecutar el archivo.</span>
+              </button>
+              <button type="button" class="pipe-step" data-am-stage="1">
+                <span class="ps-k">ETAPA 2 · AL CORRER NODE</span>
+                <span class="ps-t">Node.js (Type Stripping)</span>
+                <span class="ps-d">Borra las etiquetas de tipo al vuelo y deja JS puro.</span>
+              </button>
+              <button type="button" class="pipe-step" data-am-stage="2">
+                <span class="ps-k">ETAPA 3 · EN TU CPU</span>
+                <span class="ps-t">Motor V8 → Procesador</span>
+                <span class="ps-d">Traduce el JS puro a código máquina y lo ejecuta.</span>
+              </button>
+            </div>
+
+            <div class="split-2">
+              <div>
+                <div style="font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 4px;" id="amCodeTitle">Archivo en tu editor (demo.ts)</div>
+                <pre class="code-block" style="margin-top: 0;" id="amCodeView"></pre>
+              </div>
+              <div class="terminal-box" id="amOutputBox"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 5: VARIABLES, ASIGNACIÓN Y TIPOS PRIMITIVOS -->
+      <section class="slide wide" data-title="Viernes · Variables y Primitivos">
+        <p class="eyebrow">Viernes · Bloque 3 · Teoría I</p>
+        <h2>Variables, asignación (<code>=</code>) y tipos primitivos</h2>
+        <div class="grid-2">
+          <div class="card accent-ts">
+            <h3><code>const</code> vs. <code>let</code> (y prohibido <code>var</code>)</h3>
+            <p>Una variable es un <strong>nombre etiquetado</strong> que apunta a un dato en memoria RAM.</p>
+            <p>• <strong><code>const</code> (por defecto siempre):</strong> no se puede reasignar después de crearla.</p>
+            <p>• <strong><code>let</code> (solo si cambia):</strong> contadores, acumuladores, puntajes.</p>
+            <div class="callout" style="margin-top: 8px;">
+              <strong><code>=</code> NO es igualdad matemática:</strong> es <strong>asignación</strong>. Evalúa la derecha y guarda el resultado a la izquierda. Por eso <code>suma = suma + 1</code> (o <code>suma += 1</code> / <code>suma++</code>) es totalmente válido.
+            </div>
+          </div>
+
+          <div class="card accent-node">
+            <h3>Tipos explícitos de Semana 1 (cero <code>any</code>)</h3>
+            <pre class="code-block" style="margin-top: 6px;"><code><span class="tok-kw">const</span> nombre: <span class="tok-type">string</span> = <span class="tok-str">"Lucía"</span>;
+<span class="tok-kw">const</span> edad: <span class="tok-type">number</span> = <span class="tok-num">24</span>;
+<span class="tok-kw">const</span> esSocio: <span class="tok-type">boolean</span> = <span class="tok-kw">true</span>;
+
+<span class="tok-cmt">// Union literal (Ej. 2: solo permite estos 4 textos)</span>
+<span class="tok-kw">const</span> operador: <span class="tok-str">'+'</span> | <span class="tok-str">'-'</span> | <span class="tok-str">'*'</span> | <span class="tok-str">'/'</span> = <span class="tok-str">'+'</span>;
+
+<span class="tok-cmt">// Template string con comillas invertidas (`)</span>
+console.log(<span class="tok-str">`Hola ${nombre}, tenés ${edad} años`</span>);</code></pre>
+            <p style="margin-top: 6px;">Usar <code>any</code> apaga TypeScript. En este curso está <strong>prohibido</strong>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 6: NULL vs UNDEFINED y SCOPE -->
+      <section class="slide wide" data-title="Viernes · null/undefined y Scope">
+        <p class="eyebrow">Viernes · Bloque 3 · Diccionario de la Industria</p>
+        <h2><code>null</code> vs. <code>undefined</code> y Scope (<code>{ }</code>)</h2>
+        <div class="grid-2">
+          <div class="card accent-js">
+            <h3><code>null</code> vs. <code>undefined</code></h3>
+            <p>Ambos representan ausencia de valor, pero con distinto significado:</p>
+            <ul class="clean" style="margin-top: 8px;">
+              <li>
+                <span class="num-badge">U</span>
+                <span><strong><code>undefined</code> (no asignado):</strong> la variable existe, pero todavía nadie le guardó un dato.</span>
+              </li>
+              <li>
+                <span class="num-badge">N</span>
+                <span><strong><code>null</code> (vacío intencional):</strong> el programador decidió explícitamente que ahí no hay dato todavía.</span>
+              </li>
+            </ul>
+            <pre class="code-block" style="margin-top: 10px;"><code><span class="tok-kw">let</span> premio: <span class="tok-type">string</span> | <span class="tok-type">undefined</span>;          <span class="tok-cmt">// undefined</span>
+<span class="tok-kw">let</span> descuento: <span class="tok-type">number</span> | <span class="tok-type">null</span> = <span class="tok-kw">null</span>;     <span class="tok-cmt">// vacío a propósito</span></code></pre>
+          </div>
+
+          <div class="card accent-ts">
+            <h3>Scope: cada <code>{ }</code> es una habitación</h3>
+            <p>Las variables declaradas adentro de llaves <code>{ }</code> nacen ahí y <strong>mueren al cerrar la llave</strong>.</p>
+            <div class="scope-outer">
+              <span class="scope-label" style="color: var(--ts);">Scope Exterior (visible adentro y afuera)</span>
+              <code>const nota: number = 8;</code><br />
+              <code>let estado: string = "Desaprobado";</code>
+              <div class="scope-inner">
+                <span class="scope-label" style="color: var(--node);">Scope Interior del if { ... }</span>
+                <code>const bonus: number = 1;</code> <span style="font-size: 12px; color: var(--muted);">← solo existe acá</span><br />
+                <code>estado = "Aprobado";</code> <span style="font-size: 12px; color: var(--node);">✓ puede leer/cambiar lo de afuera</span>
+              </div>
+              <div style="margin-top: 8px; font-size: 12px; color: var(--err);">
+                ✗ Afuera: <code>console.log(bonus)</code> → Error (<code>bonus</code> ya murió).
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 7: INTERACTIVO #2 — OPERADORES Y CONDICIONALES -->
+      <section class="slide wide" data-title="Interactivo · Operadores e if/else">
+        <p class="eyebrow">Viernes · Bloque 4 · Interactivo #2</p>
+        <h2>Operadores (<code>%</code>, <code>===</code>, <code>&&</code>, <code>||</code>) y el orden del <code>if / else if</code></h2>
+        <div class="grid-3" style="margin-top: 10px;">
+          <div class="card" style="padding: 12px 14px;">
+            <h3>Módulo <code>%</code></h3>
+            <p>Devuelve el <strong>resto</strong> de la división. <code>10 % 2 === 0</code> (par), <code>15 % 3 === 0</code> (múltiplo de 3).</p>
+          </div>
+          <div class="card" style="padding: 12px 14px;">
+            <h3>Siempre <code>===</code> y <code>!==</code></h3>
+            <p>Compara <strong>valor y tipo</strong>. Prohibido <code>==</code> (hace conversiones raras en JS).</p>
+          </div>
+          <div class="card" style="padding: 12px 14px;">
+            <h3>Lógicos: <code>&&</code> · <code>||</code> · <code>!</code></h3>
+            <p><code>&&</code>: ambos <code>true</code>. <code>||</code>: al menos uno <code>true</code>. <code>!</code>: invierte.</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-bar">
+            <strong style="font-size: 13px;">Simulador en vivo · Descuento de comercio (Ej. 5)</strong>
+            <div class="btn-group">
+              <button id="ordBugBtn" type="button" class="chip active">Ver trampa (orden mal)</button>
+              <button id="ordFixBtn" type="button" class="chip">Ver corregido (más específico primero)</button>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="sim-controls">
+              <div class="sim-field">
+                <label for="montoSlider"><code>monto</code>: <strong id="montoVal">$25.000</strong></label>
+                <input id="montoSlider" type="range" min="10000" max="35000" step="1000" value="25000" />
+              </div>
+              <div class="sim-field">
+                <label><code>esSocio</code> (boolean)</label>
+                <button id="socioToggle" type="button" class="chip active">esSocio = true</button>
+              </div>
+              <div class="sim-field" style="margin-left: auto;">
+                <label>Resultado en consola</label>
+                <span id="simResultBadge" class="tag js">Descuento: 15% · Total: $21.250</span>
+              </div>
+            </div>
+
+            <div class="terminal-box" id="simCodeBox"></div>
+            <p id="simExplain" style="font-size: 13px; color: var(--muted); margin-top: 10px;"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 8: BUCLES (for vs while) Y 3 PATRONES CLAVE -->
+      <section class="slide wide" data-title="Viernes · Bucles y Patrones">
+        <p class="eyebrow">Viernes · Bloque 4 · Teoría II</p>
+        <h2>Bucles (<code>for</code> vs. <code>while</code>) y 3 patrones clave</h2>
+        <div class="grid-2">
+          <div class="card accent-ts">
+            <h3><code>for</code> — Sabés cuántas vueltas dar</h3>
+            <pre class="code-block" style="margin-top: 6px;"><code><span class="tok-cmt">// 1. inicio | 2. condición | 3. avance</span>
+<span class="tok-kw">for</span> (<span class="tok-kw">let</span> i: <span class="tok-type">number</span> = <span class="tok-num">1</span>; i &lt;= <span class="tok-num">10</span>; i++) {
+  console.log(<span class="tok-str">`7 x ${i} = ${7 * i}`</span>);
+}</code></pre>
+            <p style="margin-top: 6px;">Ideal para tablas, sumatorias del 1 a <code>N</code>, FizzBuzz y 3 rondas.</p>
+          </div>
+
+          <div class="card accent-js">
+            <h3><code>while</code> — Repetís mientras sea <code>true</code></h3>
+            <pre class="code-block" style="margin-top: 6px;"><code><span class="tok-kw">let</span> cuenta: <span class="tok-type">number</span> = <span class="tok-num">3</span>;
+<span class="tok-kw">while</span> (cuenta &gt;= <span class="tok-num">0</span>) {
+  console.log(cuenta);
+  cuenta--; <span class="tok-cmt">// ¡SIN ESTO = bucle infinito!</span>
+}</code></pre>
+            <p style="margin-top: 6px;">Si olvidás actualizar la condición, frenás el programa con <code>Ctrl + C</code>.</p>
+          </div>
+        </div>
+
+        <div class="grid-3" style="margin-top: 14px;">
+          <div class="card">
+            <span class="phase-num">Patrón 1</span>
+            <h3>Anidamiento</h3>
+            <p>Podés poner un <code>if</code> adentro de un <code>for</code> para filtrar solo pares o evaluar FizzBuzz en cada vuelta.</p>
+          </div>
+          <div class="card">
+            <span class="phase-num">Patrón 2</span>
+            <h3>Acumulador: <code>0</code> vs. <code>1</code></h3>
+            <p>Sumas arrancan en <code>0</code> (<code>suma += i</code>). Multiplicaciones arrancan en <code>1</code> (<code>fact *= i</code>) — clave para Factorial.</p>
+          </div>
+          <div class="card">
+            <span class="phase-num">Patrón 3</span>
+            <h3>Entrada → Proceso → Salida</h3>
+            <p>Antes de teclear: definí tus <code>const</code> de entrada, elegí <code>if</code>/bucle, y cerrá con <code>console.log</code>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 9: INTERACTIVO #3 — TRACE TABLE PASO A PASO -->
+      <section class="slide wide" data-title="Interactivo · Trace Table">
+        <p class="eyebrow">Viernes · Bloque 4 · Interactivo #3</p>
+        <h2>Trace Table: simulá la computadora paso a paso</h2>
+        <p class="lead">
+          Antes de correr un bucle a ciegas, seguí cada línea en tu cabeza. Usá los controles para avanzar paso a paso y ver cómo cambian la memoria RAM, la tabla y la consola.
+        </p>
+
+        <div class="panel">
+          <div class="panel-bar">
+            <div class="btn-group">
+              <button id="trModeFor" type="button" class="chip active">Ejemplo A: for (Sumatoria 1..4)</button>
+              <button id="trModeWhile" type="button" class="chip">Ejemplo B: while (Cuenta regresiva 3..0)</button>
+            </div>
+            <div class="btn-group">
+              <button id="trPrev" type="button">← Anterior</button>
+              <button id="trNext" type="button" class="primary">Siguiente paso →</button>
+              <button id="trReset" type="button">↺ Reiniciar</button>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="split-2">
+              <div>
+                <div id="trCode" class="trace-code"></div>
+                <div class="terminal-box" style="margin-top: 10px; min-height: 78px;">
+                  <div class="term-muted">// Consola simulada</div>
+                  <div id="trConsole"></div>
+                </div>
+              </div>
+              <div>
+                <div id="trMem" class="mem-boxes"></div>
+                <div id="trNote" class="callout ts" style="margin-top: 0; margin-bottom: 12px;"></div>
+                <div style="max-height: 215px; overflow-y: auto;">
+                  <table class="trace-tbl">
+                    <thead id="trHead"></thead>
+                    <tbody id="trBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 10: DOMINGO — SETUP + MÉTODO PRIMM -->
+      <section class="slide wide" data-title="Domingo · Setup + PRIMM">
+        <p class="eyebrow ok">Domingo · Bloque 1 · Laboratorio Práctico en Vivo</p>
+        <h2>Arrancamos el domingo: rama limpia + método PRIMM</h2>
+        <div class="grid-2">
+          <div class="card accent-node">
+            <h3>1. Setup en tu terminal (todos juntos)</h3>
+            <p>Primero <strong>Sync fork</strong> en GitHub, después en tu terminal de VS Code:</p>
+            <pre class="code-block" style="margin-top: 8px;"><code>git checkout main
+git pull origin main
+git checkout -b entrega/semana-01
+mkdir -p entregas/tu-usuario/semana-01
+cd entregas/tu-usuario/semana-01</code></pre>
+            <p style="margin-top: 8px;">Verificá con <code>git branch</code> y <code>pwd</code> antes de crear tu primer archivo.</p>
+          </div>
+
+          <div class="card accent-ts">
+            <h3>2. Método PRIMM (no arrancar a ciegas)</h3>
+            <ul class="clean" style="margin-top: 6px;">
+              <li><span class="num-badge">P</span><span><strong>Predict:</strong> leé el código y predecí la salida antes de correrlo.</span></li>
+              <li><span class="num-badge">R</span><span><strong>Run:</strong> ejecutá <code>node archivo.ts</code> y contrastá.</span></li>
+              <li><span class="num-badge">I</span><span><strong>Investigate:</strong> entendé <em>por qué</em> dio ese resultado.</span></li>
+              <li><span class="num-badge">M</span><span><strong>Modify:</strong> cambiá una condición o dato y volvé a probar.</span></li>
+              <li><span class="num-badge">M</span><span><strong>Make:</strong> recién ahí escribís tu ejercicio desde cero.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 11: INTERACTIVO #4 — CAZADOR DE BUGS -->
+      <section class="slide wide" data-title="Interactivo · Cazador de Bugs">
+        <p class="eyebrow err">Domingo · Bloque 2 · Interactivo #4</p>
+        <h2>Cazador de Bugs: encontrá el fallo solo leyendo</h2>
+        <p class="lead">
+          En la era de la IA, auditar código roto vale tanto como escribirlo. Detectá qué falla en cada snippet antes de revelar la solución.
+        </p>
+
+        <div class="panel">
+          <div class="panel-bar">
+            <div class="btn-group">
+              <button type="button" class="chip active bug-tab" data-bug="0">Bug 1 · Scope roto</button>
+              <button type="button" class="chip bug-tab" data-bug="1">Bug 2 · Off-by-one (&lt; vs &lt;=)</button>
+              <button type="button" class="chip bug-tab" data-bug="2">Bug 3 · while infinito</button>
+            </div>
+            <button id="bugRevealBtn" type="button" class="primary">Revelar diagnóstico y solución</button>
+          </div>
+          <div class="panel-body">
+            <div class="split-2">
+              <div>
+                <div style="font-size: 12px; font-weight: 700; color: var(--err); margin-bottom: 4px;">Código con bug</div>
+                <pre class="code-block" style="margin-top: 0;" id="bugBrokenCode"></pre>
+              </div>
+              <div id="bugSolutionWrap" style="display: none;">
+                <div style="font-size: 12px; font-weight: 700; color: var(--node); margin-bottom: 4px;">Código corregido</div>
+                <pre class="code-block" style="margin-top: 0;" id="bugFixedCode"></pre>
+                <div class="callout ok" id="bugExplain" style="margin-top: 10px;"></div>
+              </div>
+              <div id="bugHiddenPlaceholder" class="card" style="justify-content: center; align-items: center; text-align: center;">
+                <p style="font-size: 14px; color: var(--muted);">Leé las líneas de la izquierda y decí en voz alta <strong>qué línea falla y por qué</strong>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 12: CONSIGNA — LOS 12 EJERCICIOS -->
+      <section class="slide wide" data-title="Consigna · 12 Ejercicios TS">
+        <p class="eyebrow">Entregable 1 · Semana 1</p>
+        <h2>Los 12 ejercicios de TypeScript (mínimo 3 commits)</h2>
+        <p class="lead">
+          Todos en <code>entregas/&lt;tu-usuario&gt;/semana-01/</code>. Tipos explícitos, cero <code>any</code>, cero subrayados rojos en VS Code y <strong>sin funciones ni arrays</strong>.
+        </p>
+
+        <div class="ex-grid">
+          <div class="ex-col">
+            <h3>Commit 1 · Variables e if (01–04)</h3>
+            <ol>
+              <li><strong>01-presentacion.ts</strong> — Variables tipadas + template string.</li>
+              <li><strong>02-calculadora-basica.ts</strong> — Union literal <code>'+'|'-'|'*'|'/'</code> y división por cero.</li>
+              <li><strong>03-par-o-impar.ts</strong> — Par/impar con <code>%</code> y signo.</li>
+              <li><strong>04-mayor-de-tres.ts</strong> — Mayor de 3 sin <code>Math.max</code>.</li>
+            </ol>
+          </div>
+          <div class="ex-col">
+            <h3>Commit 2 · Lógica y for (05–08)</h3>
+            <ol start="5">
+              <li><strong>05-descuento-comercio.ts</strong> — 15 % (&gt;$20.000) o 20 % (y socio).</li>
+              <li><strong>06-validador-nota.ts</strong> — Rango 1–10 + Desaprobado / Aprobado / Excelente.</li>
+              <li><strong>07-tabla-multiplicar.ts</strong> — Tabla del 1 al 10 con <code>for</code>.</li>
+              <li><strong>08-sumatoria-pares.ts</strong> — Suma de pares entre 1 y <code>N</code>.</li>
+            </ol>
+          </div>
+          <div class="ex-col">
+            <h3>Commit 3 · while e integradores (09–12)</h3>
+            <ol start="9">
+              <li><strong>09-cuenta-regresiva.ts</strong> — De <code>N</code> a <code>0</code> con <code>while</code> + "¡Despegue!".</li>
+              <li><strong>10-factorial.ts</strong> — Acumulador desde <code>1</code> (<code>0! = 1</code>, validar negativos).</li>
+              <li><strong>11-fizzbuzz.ts</strong> — Del 1 al 50 (múltiplos de 3, 5 y ambos).</li>
+              <li><strong>12-piedra-papel-tijera.ts</strong> — 3 rondas simuladas en un <code>for</code>.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="callout ts">
+          <strong>Tip para el Ejercicio 12 (sin leer teclado):</strong> simulá las jugadas con <code>const azar: number = Math.floor(Math.random() * 3);</code> (<code>0 = "piedra"</code>, <code>1 = "papel"</code>, <code>2 = "tijera"</code>) dentro de un <code>for</code> de 3 rondas.
+        </div>
+      </section>
+
+      <!-- SLIDE 13: CIERRE -->
+      <section class="slide" data-title="Cierre y Entrega">
+        <p class="eyebrow ok">Próximos Pasos · Semana 1</p>
+        <h2>Checklist antes de abrir tu Pull Request</h2>
+        <ul class="clean">
+          <li><span class="num-badge">1</span><span>Corriste los <strong>12 archivos</strong> con <code>node &lt;archivo&gt;.ts</code> probando casos borde (0, negativos, empates).</span></li>
+          <li><span class="num-badge">2</span><span><strong>Cero subrayados rojos</strong> en VS Code, cero <code>any</code>, solo <code>const</code>/<code>let</code> y <code>===</code>.</span></li>
+          <li><span class="num-badge">3</span><span>Subiste <strong>al menos 3 commits separados</strong> en la rama <code>entrega/semana-01</code>.</span></li>
+          <li><span class="num-badge">4</span><span>Abriste el PR antes del <strong>jueves 23:59</strong>, declaraste con honestidad tu uso de IA y <code>evaluar-pr</code> está en verde.</span></li>
+        </ul>
+        <div class="callout ok" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+          <span><strong>Dudas entre semana:</strong> primero al grupo; si arrobás al profe, mandá <em>qué probaste + código + error exacto</em>.</span>
+          <button id="restartBtn" type="button">↺ Volver al inicio</button>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span class="shortcuts-hint">Atajos: ← / → slide · G índice · F pantalla completa · T tema</span>
+      <div class="controls">
+        <button id="prevBtn" type="button">← Anterior</button>
+        <button id="nextBtn" type="button" class="primary">Siguiente →</button>
+      </div>
+    </footer>
+
+    <!-- Modal Índice de Slides -->
+    <div id="overviewModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Índice de diapositivas">
+      <div class="modal">
+        <div class="modal-head">
+          <strong>Índice · Semana 1</strong>
+          <button id="closeModalBtn" type="button">Cerrar (Esc)</button>
+        </div>
+        <div id="modalGrid" class="modal-grid"></div>
+      </div>
+    </div>
+
+    <script>
+      /* ================================
+         NAVEGACIÓN, HASH, TEMA & MODAL
+         ================================ */
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const progress = document.getElementById('progress');
+      const counterBtn = document.getElementById('counterBtn');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const themeBtn = document.getElementById('themeBtn');
+      const fsBtn = document.getElementById('fsBtn');
+      const restartBtn = document.getElementById('restartBtn');
+      const overviewModal = document.getElementById('overviewModal');
+      const modalGrid = document.getElementById('modalGrid');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+
+      function getInitialSlide() {
+        const match = window.location.hash.match(/^#slide-(\d+)$/);
+        if (match) {
+          const n = parseInt(match[1], 10) - 1;
+          if (n >= 0 && n < slides.length) return n;
+        }
+        return 0;
+      }
+
+      let index = getInitialSlide();
+
+      function renderSlides(updateHash = true) {
+        slides.forEach((s, i) => s.classList.toggle('active', i === index));
+        progress.style.width = (((index + 1) / slides.length) * 100) + '%';
+        counterBtn.textContent = `${index + 1} / ${slides.length}`;
+        prevBtn.disabled = index === 0;
+        nextBtn.disabled = index === slides.length - 1;
+        if (updateHash) history.replaceState(null, '', `#slide-${index + 1}`);
+        updateOverviewHighlight();
+      }
+
+      function goTo(newIndex) {
+        const clamped = Math.max(0, Math.min(slides.length - 1, newIndex));
+        if (clamped !== index) {
+          index = clamped;
+          renderSlides();
+        }
+      }
+
+      function applyTheme(dark) {
+        document.documentElement.classList.toggle('dark', dark);
+        themeBtn.textContent = dark ? 'Claro' : 'OLED';
+        try { localStorage.setItem('wtdev-semana1-theme', dark ? 'dark' : 'light'); } catch {}
+      }
+      function toggleTheme() {
+        applyTheme(!document.documentElement.classList.contains('dark'));
+      }
+      try {
+        if (localStorage.getItem('wtdev-semana1-theme') === 'dark') applyTheme(true);
+      } catch {}
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+        else document.exitFullscreen?.();
+      }
+      document.addEventListener('fullscreenchange', () => {
+        fsBtn.textContent = document.fullscreenElement ? 'Salir' : 'Pantalla completa';
+      });
+
+      function buildOverview() {
+        modalGrid.innerHTML = '';
+        slides.forEach((s, i) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'slide-thumb';
+          btn.innerHTML = `<span class="st-num">Slide ${String(i + 1).padStart(2, '0')}</span><span class="st-title">${s.dataset.title || 'Slide ' + (i + 1)}</span>`;
+          btn.addEventListener('click', () => { goTo(i); closeModal(); });
+          modalGrid.appendChild(btn);
+        });
+      }
+      function updateOverviewHighlight() {
+        modalGrid.querySelectorAll('.slide-thumb').forEach((t, i) => t.classList.toggle('current', i === index));
+      }
+      function openModal() { overviewModal.classList.add('open'); updateOverviewHighlight(); }
+      function closeModal() { overviewModal.classList.remove('open'); }
+
+      counterBtn.addEventListener('click', openModal);
+      closeModalBtn.addEventListener('click', closeModal);
+      overviewModal.addEventListener('click', (e) => { if (e.target === overviewModal) closeModal(); });
+      prevBtn.addEventListener('click', () => goTo(index - 1));
+      nextBtn.addEventListener('click', () => goTo(index + 1));
+      themeBtn.addEventListener('click', toggleTheme);
+      fsBtn.addEventListener('click', toggleFullscreen);
+      restartBtn.addEventListener('click', () => goTo(0));
+
+      window.addEventListener('hashchange', () => { index = getInitialSlide(); renderSlides(false); });
+
+      function isEditing(el) {
+        return el && (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT' || el.isContentEditable);
+      }
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          if (overviewModal.classList.contains('open')) { closeModal(); return; }
+          if (isEditing(document.activeElement)) { document.activeElement.blur(); return; }
+        }
+        if (isEditing(document.activeElement) || overviewModal.classList.contains('open')) return;
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(index + 1); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(index - 1); }
+        else if (e.key.toLowerCase() === 't') toggleTheme();
+        else if (e.key.toLowerCase() === 'g') openModal();
+        else if (e.key.toLowerCase() === 'f') toggleFullscreen();
+      });
+
+      /* ================================
+         WIDGET #1: SIN MAGIA (VS CODE vs NODE)
+         ================================ */
+      const amValidBtn = document.getElementById('amValidBtn');
+      const amErrBtn = document.getElementById('amErrBtn');
+      const amStageBtns = Array.from(document.querySelectorAll('[data-am-stage]'));
+      const amCodeTitle = document.getElementById('amCodeTitle');
+      const amCodeView = document.getElementById('amCodeView');
+      const amOutputBox = document.getElementById('amOutputBox');
+
+      let amMode = 'valid'; // 'valid' | 'error'
+      let amStage = 0;      // 0: VS Code, 1: Node strip, 2: V8/CPU
+
+      function renderAntiMagic() {
+        amValidBtn.classList.toggle('active', amMode === 'valid');
+        amErrBtn.classList.toggle('active', amMode === 'error');
+        amStageBtns.forEach((b, i) => b.classList.toggle('active', i === amStage));
+
+        const isErr = amMode === 'error';
+        if (amStage === 0) {
+          amCodeTitle.textContent = 'Etapa 1 · Archivo demo.ts en VS Code (tsserver activo)';
+          if (!isErr) {
+            amCodeView.innerHTML = `<code><span class="tok-kw">const</span> nombre: <span class="tok-type">string</span> = <span class="tok-str">"Mateo"</span>;\n<span class="tok-kw">const</span> edad: <span class="tok-type">number</span> = <span class="tok-num">25</span>;\nconsole.log(<span class="tok-str">\`\${nombre} tiene \${edad} años\`</span>);</code>`;
+            amOutputBox.innerHTML = `
+              <div class="term-muted">// Diagnóstico de VS Code (sin ejecutar nada)</div>
+              <div class="term-ok">✓ 0 errores de tipo detectados por tsserver.</div>
+              <div class="term-muted">VS Code leyó <code>: string</code> y <code>: number</code> y confirmó que los valores coinciden.</div>`;
+          } else {
+            amCodeView.innerHTML = `<code><span class="tok-kw">const</span> nombre: <span class="tok-type">string</span> = <span class="tok-str">"Mateo"</span>;\n<span class="tok-kw">const</span> <span class="tok-err">edad</span>: <span class="tok-type">number</span> = <span class="tok-str">"veinte"</span>;\nconsole.log(<span class="tok-str">\`\${nombre} tiene \${edad} años\`</span>);</code>`;
+            amOutputBox.innerHTML = `
+              <div class="term-muted">// Diagnóstico de VS Code (antes de tocar la terminal)</div>
+              <div class="term-hl">✗ Error en línea 2: Type 'string' is not assignable to type 'number'.</div>
+              <div class="term-muted">Error Lens te frena acá mismo. Todavía no corriste Node.</div>`;
+          }
+        } else if (amStage === 1) {
+          amCodeTitle.textContent = 'Etapa 2 · Node.js borra los tipos al vuelo (Type Stripping)';
+          const valHtml = isErr ? `<span class="tok-str">"veinte"</span>` : `<span class="tok-num">25</span>`;
+          amCodeView.innerHTML = `<code><span class="tok-kw">const</span> nombre<span class="tok-ghost">: string</span> = <span class="tok-str">"Mateo"</span>;\n<span class="tok-kw">const</span> edad<span class="tok-ghost">: number</span> = ${valHtml};\nconsole.log(<span class="tok-str">\`\${nombre} tiene \${edad} años\`</span>);</code>`;
+          amOutputBox.innerHTML = `
+            <div><span class="term-prompt">$</span> node demo.ts</div>
+            <div class="term-warn">→ Node reemplaza <code>: string</code> y <code>: number</code> por espacios en blanco (para no mover los números de línea).</div>
+            <div class="term-muted">${isErr ? '¡OJO! Node NO revisó que "veinte" fuera texto. Solo borró el tipo y pasó JS puro a V8.' : 'Ahora el código es 100% JavaScript estándar listo para el motor V8.'}</div>`;
+        } else {
+          amCodeTitle.textContent = 'Etapa 3 · Motor V8 compila JS a código máquina (CPU)';
+          const valHtml = isErr ? `<span class="tok-str">"veinte"</span>` : `<span class="tok-num">25</span>`;
+          amCodeView.innerHTML = `<code><span class="tok-kw">const</span> nombre         = <span class="tok-str">"Mateo"</span>;\n<span class="tok-kw">const</span> edad         = ${valHtml};\nconsole.log(<span class="tok-str">\`\${nombre} tiene \${edad} años\`</span>);</code>`;
+          amOutputBox.innerHTML = isErr
+            ? `<div><span class="term-prompt">$</span> node demo.ts</div>
+               <div class="term-warn">Mateo tiene veinte años</div>
+               <div class="term-hl"><strong>¡Moraleja Anti-Magia!</strong> Corrió igual aunque estaba roto en TS. Si después hacías <code>edad + 1</code> daba <code>"veinte1"</code>. <strong>Jamás ignores subrayados rojos en VS Code.</strong></div>`
+            : `<div><span class="term-prompt">$</span> node demo.ts</div>
+               <div class="term-ok">Mateo tiene 25 años</div>
+               <div class="term-muted">V8 tradujo ese JavaScript a instrucciones de tu CPU y mostró el resultado en la terminal.</div>`;
+        }
+      }
+
+      amValidBtn.addEventListener('click', () => { amMode = 'valid'; renderAntiMagic(); });
+      amErrBtn.addEventListener('click', () => { amMode = 'error'; renderAntiMagic(); });
+      amStageBtns.forEach((btn, i) => btn.addEventListener('click', () => { amStage = i; renderAntiMagic(); }));
+      renderAntiMagic();
+
+      /* ================================
+         WIDGET #2: SIMULADOR IF / ELSE IF
+         ================================ */
+      const montoSlider = document.getElementById('montoSlider');
+      const montoVal = document.getElementById('montoVal');
+      const socioToggle = document.getElementById('socioToggle');
+      const ordBugBtn = document.getElementById('ordBugBtn');
+      const ordFixBtn = document.getElementById('ordFixBtn');
+      const simCodeBox = document.getElementById('simCodeBox');
+      const simResultBadge = document.getElementById('simResultBadge');
+      const simExplain = document.getElementById('simExplain');
+
+      let simSocio = true;
+      let simOrder = 'bug'; // 'bug' | 'fix'
+
+      function renderSim() {
+        const monto = Number(montoSlider.value);
+        montoVal.textContent = '$' + monto.toLocaleString('es-AR');
+        socioToggle.textContent = `esSocio = ${simSocio}`;
+        socioToggle.classList.toggle('active', simSocio);
+        ordBugBtn.classList.toggle('active', simOrder === 'bug');
+        ordFixBtn.classList.toggle('active', simOrder === 'fix');
+
+        let desc = 0;
+        let hitBranch = 2; // 0, 1, or 2 (else)
+
+        if (simOrder === 'bug') {
+          if (monto > 20000) { desc = 0.15; hitBranch = 0; }
+          else if (monto > 20000 && simSocio) { desc = 0.20; hitBranch = 1; }
+          else { desc = 0; hitBranch = 2; }
+        } else {
+          if (monto > 20000 && simSocio) { desc = 0.20; hitBranch = 0; }
+          else if (monto > 20000) { desc = 0.15; hitBranch = 1; }
+          else { desc = 0; hitBranch = 2; }
+        }
+
+        const total = monto - monto * desc;
+        const isBugTrap = simOrder === 'bug' && monto > 20000 && simSocio;
+
+        simResultBadge.textContent = `Descuento: ${Math.round(desc * 100)}% · Total: $${total.toLocaleString('es-AR')}`;
+        simResultBadge.className = isBugTrap ? 'tag err' : (desc > 0 ? 'tag node' : 'tag');
+
+        const b0Class = hitBranch === 0 ? (isBugTrap ? 'bug-hit' : 'hit') : 'skip';
+        const b1Class = hitBranch === 1 ? 'hit' : 'skip';
+        const b2Class = hitBranch === 2 ? 'hit' : 'skip';
+
+        if (simOrder === 'bug') {
+          simCodeBox.innerHTML = `
+            <div class="branch-line ${b0Class}">if (monto &gt; 20000) { descuento = 0.15; }  <span class="term-muted">// ${monto > 20000}</span></div>
+            <div class="branch-line ${b1Class}">else if (monto &gt; 20000 &amp;&amp; esSocio) { descuento = 0.20; }  <span class="term-muted">// ¡inalcanzable!</span></div>
+            <div class="branch-line ${b2Class}">else { descuento = 0; }</div>`;
+          simExplain.innerHTML = isBugTrap
+            ? '<strong>¡Trampa activada!</strong> Aunque es socio y supera $20.000, entró en el primer <code>if</code> y JavaScript salteó el <code>else if</code>. Le cobraste mal.'
+            : 'Probá subir el monto por encima de <strong>$20.000</strong> con <code>esSocio = true</code> para ver por qué este orden tiene un bug.';
+        } else {
+          simCodeBox.innerHTML = `
+            <div class="branch-line ${b0Class}">if (monto &gt; 20000 &amp;&amp; esSocio) { descuento = 0.20; }  <span class="term-muted">// ${monto > 20000 && simSocio}</span></div>
+            <div class="branch-line ${b1Class}">else if (monto &gt; 20000) { descuento = 0.15; }  <span class="term-muted">// ${monto > 20000 && !simSocio}</span></div>
+            <div class="branch-line ${b2Class}">else { descuento = 0; }</div>`;
+          simExplain.innerHTML = '<strong>Regla de oro:</strong> en un <code>if / else if</code> siempre poné primero la condición <strong>más específica</strong> (la que exige más requisitos con <code>&&</code>).';
+        }
+      }
+
+      montoSlider.addEventListener('input', renderSim);
+      socioToggle.addEventListener('click', () => { simSocio = !simSocio; renderSim(); });
+      ordBugBtn.addEventListener('click', () => { simOrder = 'bug'; renderSim(); });
+      ordFixBtn.addEventListener('click', () => { simOrder = 'fix'; renderSim(); });
+      renderSim();
+
+      /* ================================
+         WIDGET #3: TRACE TABLE INTERACTIVA
+         ================================ */
+      const TRACE_DATA = {
+        for: {
+          lines: [
+            'let suma: number = 0;',
+            'for (let i: number = 1; i <= 4; i++) {',
+            '  suma = suma + i;',
+            '}',
+            'console.log(`Total: ${suma}`);'
+          ],
+          headers: ['Paso', 'i', 'i <= 4', 'Operación', 'suma'],
+          steps: [
+            { line: 0, mem: { i: '—', suma: 0 }, console: [], note: 'Declaramos el acumulador suma inicializado en 0.', row: ['Inicio', '—', '—', 'suma = 0', '0'] },
+            { line: 1, mem: { i: 1, suma: 0 }, console: [], note: 'Arranca el for: i = 1. Evalúa 1 <= 4 → true (entra).', row: ['Vuelta 1', '1', 'true', 'entra al bloque', '0'] },
+            { line: 2, mem: { i: 1, suma: 1 }, console: [], note: 'Ejecuta suma = 0 + 1 → suma pasa a valer 1.', row: ['Vuelta 1', '1', 'true', 'suma = 0 + 1', '1'] },
+            { line: 1, mem: { i: 2, suma: 1 }, console: [], note: 'Fin de vuelta: i++ (i = 2). Evalúa 2 <= 4 → true.', row: ['Vuelta 2', '2', 'true', 'i++ → entra', '1'] },
+            { line: 2, mem: { i: 2, suma: 3 }, console: [], note: 'Ejecuta suma = 1 + 2 → suma pasa a valer 3.', row: ['Vuelta 2', '2', 'true', 'suma = 1 + 2', '3'] },
+            { line: 1, mem: { i: 3, suma: 3 }, console: [], note: 'Fin de vuelta: i++ (i = 3). Evalúa 3 <= 4 → true.', row: ['Vuelta 3', '3', 'true', 'i++ → entra', '3'] },
+            { line: 2, mem: { i: 3, suma: 6 }, console: [], note: 'Ejecuta suma = 3 + 3 → suma pasa a valer 6.', row: ['Vuelta 3', '3', 'true', 'suma = 3 + 3', '6'] },
+            { line: 1, mem: { i: 4, suma: 6 }, console: [], note: 'Fin de vuelta: i++ (i = 4). Evalúa 4 <= 4 → true.', row: ['Vuelta 4', '4', 'true', 'i++ → entra', '6'] },
+            { line: 2, mem: { i: 4, suma: 10 }, console: [], note: 'Ejecuta suma = 6 + 4 → suma pasa a valer 10.', row: ['Vuelta 4', '4', 'true', 'suma = 6 + 4', '10'] },
+            { line: 1, mem: { i: 5, suma: 10 }, console: [], note: 'i++ (i = 5). Evalúa 5 <= 4 → false. ¡Sale del bucle!', row: ['Salida', '5', 'false', 'sale del for', '10'] },
+            { line: 4, mem: { i: 'murió', suma: 10 }, console: ['Total: 10'], note: 'i ya murió (scope del for). Imprime "Total: 10".', row: ['Fin', '—', '—', 'console.log', '10'] }
+          ]
+        },
+        while: {
+          lines: [
+            'let cuenta: number = 3;',
+            'while (cuenta >= 0) {',
+            '  console.log(cuenta);',
+            '  cuenta--;',
+            '}',
+            'console.log("¡Despegue!");'
+          ],
+          headers: ['Paso', 'cuenta', 'cuenta >= 0', 'Acción'],
+          steps: [
+            { line: 0, mem: { cuenta: 3 }, console: [], note: 'Inicializamos cuenta en 3.', row: ['Inicio', '3', '—', 'cuenta = 3'] },
+            { line: 1, mem: { cuenta: 3 }, console: [], note: 'Evalúa 3 >= 0 → true. Entra al while.', row: ['Vuelta 1', '3', 'true', 'entra'] },
+            { line: 2, mem: { cuenta: 3 }, console: ['3'], note: 'Imprime 3 en consola.', row: ['Vuelta 1', '3', 'true', 'imprime 3'] },
+            { line: 3, mem: { cuenta: 2 }, console: ['3'], note: 'cuenta-- resta 1 → ahora cuenta vale 2.', row: ['Vuelta 1', '2', '—', 'cuenta--'] },
+            { line: 2, mem: { cuenta: 2 }, console: ['3', '2'], note: '2 >= 0 es true → imprime 2.', row: ['Vuelta 2', '2', 'true', 'imprime 2'] },
+            { line: 3, mem: { cuenta: 1 }, console: ['3', '2'], note: 'cuenta-- → ahora vale 1.', row: ['Vuelta 2', '1', '—', 'cuenta--'] },
+            { line: 2, mem: { cuenta: 1 }, console: ['3', '2', '1'], note: '1 >= 0 es true → imprime 1.', row: ['Vuelta 3', '1', 'true', 'imprime 1'] },
+            { line: 3, mem: { cuenta: 0 }, console: ['3', '2', '1'], note: 'cuenta-- → ahora vale 0.', row: ['Vuelta 3', '0', '—', 'cuenta--'] },
+            { line: 2, mem: { cuenta: 0 }, console: ['3', '2', '1', '0'], note: '0 >= 0 es true → imprime 0.', row: ['Vuelta 4', '0', 'true', 'imprime 0'] },
+            { line: 3, mem: { cuenta: -1 }, console: ['3', '2', '1', '0'], note: 'cuenta-- → ahora vale -1.', row: ['Vuelta 4', '-1', '—', 'cuenta--'] },
+            { line: 1, mem: { cuenta: -1 }, console: ['3', '2', '1', '0'], note: 'Evalúa -1 >= 0 → false. Sale del while.', row: ['Salida', '-1', 'false', 'sale'] },
+            { line: 5, mem: { cuenta: -1 }, console: ['3', '2', '1', '0', '¡Despegue!'], note: 'Imprime "¡Despegue!" y termina el programa.', row: ['Fin', '-1', 'false', '¡Despegue!'] }
+          ]
+        }
+      };
+
+      const trModeFor = document.getElementById('trModeFor');
+      const trModeWhile = document.getElementById('trModeWhile');
+      const trPrev = document.getElementById('trPrev');
+      const trNext = document.getElementById('trNext');
+      const trReset = document.getElementById('trReset');
+      const trCode = document.getElementById('trCode');
+      const trConsole = document.getElementById('trConsole');
+      const trMem = document.getElementById('trMem');
+      const trNote = document.getElementById('trNote');
+      const trHead = document.getElementById('trHead');
+      const trBody = document.getElementById('trBody');
+
+      let trMode = 'for';
+      let trStep = 0;
+
+      function renderTrace() {
+        const cfg = TRACE_DATA[trMode];
+        const st = cfg.steps[trStep];
+
+        trModeFor.classList.toggle('active', trMode === 'for');
+        trModeWhile.classList.toggle('active', trMode === 'while');
+        trPrev.disabled = trStep === 0;
+        trNext.disabled = trStep === cfg.steps.length - 1;
+
+        trCode.innerHTML = cfg.lines.map((ln, i) =>
+          `<div class="trace-line ${i === st.line ? 'active' : ''}"><span class="ln">${i + 1}</span><span>${ln.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span></div>`
+        ).join('');
+
+        trMem.innerHTML = Object.entries(st.mem).map(([k, v]) =>
+          `<div class="mem-box"><div class="mk">${k}</div><div class="mv">${v}</div></div>`
+        ).join('');
+
+        trNote.innerHTML = `<strong>Paso ${trStep + 1} / ${cfg.steps.length}:</strong> ${st.note}`;
+        trConsole.innerHTML = st.console.length
+          ? st.console.map(c => `<div class="term-prompt">&gt; ${c}</div>`).join('')
+          : '<span class="term-muted">(todavía no se imprimió nada)</span>';
+
+        trHead.innerHTML = `<tr>${cfg.headers.map(h => `<th>${h}</th>`).join('')}</tr>`;
+        trBody.innerHTML = cfg.steps.slice(0, trStep + 1).map((s, idx) =>
+          `<tr class="${idx === trStep ? 'latest' : ''}">${s.row.map(c => `<td>${c}</td>`).join('')}</tr>`
+        ).join('');
+      }
+
+      trModeFor.addEventListener('click', () => { trMode = 'for'; trStep = 0; renderTrace(); });
+      trModeWhile.addEventListener('click', () => { trMode = 'while'; trStep = 0; renderTrace(); });
+      trPrev.addEventListener('click', () => { if (trStep > 0) { trStep--; renderTrace(); } });
+      trNext.addEventListener('click', () => { if (trStep < TRACE_DATA[trMode].steps.length - 1) { trStep++; renderTrace(); } });
+      trReset.addEventListener('click', () => { trStep = 0; renderTrace(); });
+      renderTrace();
+
+      /* ================================
+         WIDGET #4: CAZADOR DE BUGS
+         ================================ */
+      const BUGS = [
+        {
+          broken: `<span class="tok-kw">const</span> nota: <span class="tok-type">number</span> = <span class="tok-num">8</span>;\n<span class="tok-kw">if</span> (nota &gt;= <span class="tok-num">7</span>) {\n  <span class="tok-kw">const</span> estado: <span class="tok-type">string</span> = <span class="tok-str">"Aprobado"</span>;\n}\nconsole.log(<span class="tok-err">estado</span>);`,
+          fixed: `<span class="tok-kw">const</span> nota: <span class="tok-type">number</span> = <span class="tok-num">8</span>;\n<span class="tok-kw">let</span> estado: <span class="tok-type">string</span> = <span class="tok-str">"Desaprobado"</span>;\n<span class="tok-kw">if</span> (nota &gt;= <span class="tok-num">7</span>) {\n  estado = <span class="tok-str">"Aprobado"</span>;\n}\nconsole.log(estado);`,
+          explain: '<strong>Diagnóstico:</strong> <code>estado</code> se declaró dentro del <code>{ }</code> del <code>if</code> y murió al cerrarse la llave. Hay que declararla con <code>let</code> afuera y reasignarla adentro.'
+        },
+        {
+          broken: `<span class="tok-cmt">// Objetivo: sumar del 1 al 5 (debe dar 15)</span>\n<span class="tok-kw">let</span> suma: <span class="tok-type">number</span> = <span class="tok-num">0</span>;\n<span class="tok-kw">for</span> (<span class="tok-kw">let</span> i: <span class="tok-type">number</span> = <span class="tok-num">1</span>; i &lt; <span class="tok-num">5</span>; i++) {\n  suma = suma + i;\n}\nconsole.log(suma); <span class="tok-cmt">// Imprime 10</span>`,
+          fixed: `<span class="tok-cmt">// Objetivo: sumar del 1 al 5 (ahora da 15)</span>\n<span class="tok-kw">let</span> suma: <span class="tok-type">number</span> = <span class="tok-num">0</span>;\n<span class="tok-kw">for</span> (<span class="tok-kw">let</span> i: <span class="tok-type">number</span> = <span class="tok-num">1</span>; i &lt;= <span class="tok-num">5</span>; i++) {\n  suma = suma + i;\n}\nconsole.log(suma); <span class="tok-cmt">// Imprime 15</span>`,
+          explain: '<strong>Diagnóstico (Off-by-one):</strong> la condición <code>i &lt; 5</code> frena cuando <code>i</code> llega a 5 sin incluirlo. Faltaba usar <code>&lt;=</code>.'
+        },
+        {
+          broken: `<span class="tok-kw">let</span> cuenta: <span class="tok-type">number</span> = <span class="tok-num">3</span>;\n<span class="tok-kw">while</span> (cuenta &gt;= <span class="tok-num">0</span>) {\n  console.log(cuenta);\n}\nconsole.log(<span class="tok-str">"¡Despegue!"</span>);`,
+          fixed: `<span class="tok-kw">let</span> cuenta: <span class="tok-type">number</span> = <span class="tok-num">3</span>;\n<span class="tok-kw">while</span> (cuenta &gt;= <span class="tok-num">0</span>) {\n  console.log(cuenta);\n  cuenta--;\n}\nconsole.log(<span class="tok-str">"¡Despegue!"</span>);`,
+          explain: '<strong>Diagnóstico (Bucle infinito):</strong> <code>cuenta</code> siempre vale 3, así que <code>cuenta &gt;= 0</code> nunca da <code>false</code>. Faltaba <code>cuenta--</code> adentro del bloque (si te pasa en vivo: <code>Ctrl + C</code>).'
+        }
+      ];
+
+      const bugTabs = Array.from(document.querySelectorAll('.bug-tab'));
+      const bugRevealBtn = document.getElementById('bugRevealBtn');
+      const bugBrokenCode = document.getElementById('bugBrokenCode');
+      const bugFixedCode = document.getElementById('bugFixedCode');
+      const bugExplain = document.getElementById('bugExplain');
+      const bugSolutionWrap = document.getElementById('bugSolutionWrap');
+      const bugHiddenPlaceholder = document.getElementById('bugHiddenPlaceholder');
+
+      let activeBug = 0;
+      let bugRevealed = false;
+
+      function renderBug() {
+        bugTabs.forEach((b, i) => b.classList.toggle('active', i === activeBug));
+        const b = BUGS[activeBug];
+        bugBrokenCode.innerHTML = `<code>${b.broken}</code>`;
+        bugFixedCode.innerHTML = `<code>${b.fixed}</code>`;
+        bugExplain.innerHTML = b.explain;
+        bugSolutionWrap.style.display = bugRevealed ? 'block' : 'none';
+        bugHiddenPlaceholder.style.display = bugRevealed ? 'none' : 'flex';
+        bugRevealBtn.textContent = bugRevealed ? 'Ocultar solución' : 'Revelar diagnóstico y solución';
+      }
+
+      bugTabs.forEach((btn, i) => btn.addEventListener('click', () => {
+        activeBug = i;
+        bugRevealed = false;
+        renderBug();
+      }));
+      bugRevealBtn.addEventListener('click', () => {
+        bugRevealed = !bugRevealed;
+        renderBug();
+      });
+      renderBug();
+
+      /* Init */
+      buildOverview();
+      renderSlides(false);
+    </script>
+  </body>
+</html>
